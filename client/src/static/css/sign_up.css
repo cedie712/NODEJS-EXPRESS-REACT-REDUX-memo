@@ -1,0 +1,14 @@
+#signup-block {
+  position: absolute;
+  display: grid;
+  padding: 150px;
+  height: 100%;
+  align-items: center;
+}
+
+
+@media (max-width:700px) {
+  #signup-block {
+    padding: 50px;
+  }
+}
