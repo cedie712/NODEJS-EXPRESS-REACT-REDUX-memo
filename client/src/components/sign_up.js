@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { connect } from 'react-redux';
-import { fetch_sign_up_token } from '../actions/getTokenAction';
 
 // css
 import '../static/css/sign_up.css'
 import M from 'materialize-css'
+
+// static js
+import validate_password from '../static/js/password_validator';
 
 class SignUp extends Component {
   constructor() {
@@ -22,12 +23,14 @@ class SignUp extends Component {
     this.process_signup = this.process_signup.bind(this);
   }
 
-  componentWillMount() {
-    this.props.fetch_sign_up_token();
-  }
-
   componentDidMount() {
     M.AutoInit();
+    axios.get('/api/user/signup')
+    .then((response) => {
+      localStorage.setItem('csrfToken', response.data.csrfToken);
+    }).catch((error) => {
+      console.log(error);
+    })
   }
 
   fetch_field_value(event) {
@@ -55,6 +58,12 @@ class SignUp extends Component {
       return  M.toast({html: 'passwords did\'t match', classes: 'rounded red darken-2'});
     }
 
+    let check_password = validate_password(password, 8);
+
+    if (check_password !== true) {
+      return  M.toast({html: check_password.error, classes: 'rounded red darken-2'});
+    }
+
     axios.post('/api/user/signup', {
       email,
       password,
@@ -71,9 +80,6 @@ class SignUp extends Component {
   }
 
   render() {
-
-    // console.log(this.props.csrfToken, 'component');
-    localStorage.setItem('csrfToken', this.props.csrfToken.csrfToken);
     return (
       <div className="SignUp">
         <div className="row">
@@ -108,8 +114,4 @@ class SignUp extends Component {
   }
 }
 
-const get_token = state => ({
-  csrfToken: state.csrf_token.csrfToken
-})
-
-export default connect(get_token, { fetch_sign_up_token })(SignUp);
+export default SignUp;
