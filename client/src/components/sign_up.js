@@ -6,8 +6,9 @@ import axios from 'axios';
 import '../static/css/sign_up.css'
 import M from 'materialize-css'
 
-// static js
+// js
 import validate_password from '../static/js/password_validator';
+
 
 class SignUp extends Component {
   constructor() {
@@ -35,8 +36,53 @@ class SignUp extends Component {
 
   fetch_field_value(event) {
     this.setState({[event.target.name]: event.target.value});
+    this.password_meter_event();
   }
 
+
+  password_meter_event() {
+    let password = document.getElementById('password-signup').value;
+    let confirm = document.getElementById('confirm-signup').value;
+    let min_length = 8;
+    let check_password = validate_password(password, confirm, min_length);
+    if (password === '' && confirm === '') {
+      document.getElementById('lvl1-meter').className = 'password-meter grey lighten-1';
+    }
+    else {
+      if(check_password !== true) {
+        document.getElementById('lvl1-meter').className = 'password-meter red';
+        document.getElementById('lvl2-meter').className = 'password-meter grey lighten-1';
+        document.getElementById('lvl3-meter').className = 'password-meter grey lighten-1';
+        document.getElementById('lvl4-meter').className = 'password-meter grey lighten-1';
+      }
+      else {
+        if (password !== confirm) {
+          document.getElementById('lvl1-meter').className = 'password-meter red';
+          document.getElementById('lvl2-meter').className = 'password-meter grey lighten-1';
+          document.getElementById('lvl3-meter').className = 'password-meter grey lighten-1';
+          document.getElementById('lvl4-meter').className = 'password-meter grey lighten-1';
+        }
+        else if (password.length < min_length) {
+          document.getElementById('lvl1-meter').className = 'password-meter red';
+        }
+        else if (password.length >= min_length && password.length < (min_length + 4) && password === confirm) {
+          document.getElementById('lvl1-meter').className = 'password-meter yellow darken-1';
+          document.getElementById('lvl2-meter').className = 'password-meter yellow darken-1';
+        }
+        else if (password.length >= (min_length + 4) && password.length < (min_length + 10) && password === confirm) {
+          document.getElementById('lvl1-meter').className = 'password-meter light-blue';
+          document.getElementById('lvl2-meter').className = 'password-meter light-blue';
+          document.getElementById('lvl3-meter').className = 'password-meter light-blue';
+        }
+        else if (password.length >= (min_length + 10) && password === confirm) {
+          document.getElementById('lvl1-meter').className = 'password-meter light-green darken-2';
+          document.getElementById('lvl2-meter').className = 'password-meter light-green darken-2';
+          document.getElementById('lvl3-meter').className = 'password-meter light-green darken-2';
+          document.getElementById('lvl4-meter').className = 'password-meter light-green darken-2';
+        }
+      }
+    }
+  }
 
 
   process_signup(event) {
@@ -54,15 +100,9 @@ class SignUp extends Component {
     }
 
     if (password !== confirm) {
-      console.log('passwords did\'t match');
       return  M.toast({html: 'passwords did\'t match', classes: 'rounded red darken-2'});
     }
 
-    let check_password = validate_password(password, 8);
-
-    if (check_password !== true) {
-      return  M.toast({html: check_password.error, classes: 'rounded red darken-2'});
-    }
 
     axios.post('/api/user/signup', {
       email,
@@ -74,7 +114,7 @@ class SignUp extends Component {
       console.log(response);
     })
     .catch((error) => {
-      console.log(error);
+      M.toast({html: error.response.data.error, classes: 'rounded red darken-2'})
     })
 
   }
@@ -100,6 +140,32 @@ class SignUp extends Component {
                 <input id="confirm-signup" name="confirm" onChange={this.fetch_field_value} value={this.state.confirm} type="password" className="light-blue-text text-lighten-3" />
                 <label htmlFor="confirm-signup">Confirm Password</label>
               </div>
+
+              {/* password_meter */}
+              <div className="row">
+                  <div className="col s3">
+                    <div id="lvl1-meter" className="password-meter grey lighten-1">
+
+                    </div>
+                  </div>
+                  <div className="col s3">
+                    <div id="lvl2-meter" className="password-meter grey lighten-1">
+
+                    </div>
+                  </div>
+                  <div className="col s3">
+                    <div id="lvl3-meter" className="password-meter grey lighten-1">
+
+                    </div>
+                  </div>
+                  <div className="col s3">
+                    <div id="lvl4-meter" className="password-meter grey lighten-1">
+
+                    </div>
+                  </div>                
+              </div>
+              {/* password_meter */}
+
             <div className="">     
             <button type="submit" onClick={this.process_signup} className="waves-effect waves-light light-green darken-2 btn-large">Submit<i className="material-icons large right">add_circle_outline</i></button>
             <br /><br />

@@ -12,3 +12,9 @@
     padding: 50px;
   }
 }
+
+.password-meter {
+  height: 5px;
+  border-radius: 5px;
+  /* margin: 10px  */
+}

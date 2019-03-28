@@ -39,4 +39,4 @@ function validate_password(password, password_confirm, min_length) {
 }
 
 
-export default validate_password;
+module.exports = validate_password;
