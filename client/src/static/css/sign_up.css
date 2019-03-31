@@ -7,14 +7,24 @@
 }
 
 
-@media (max-width:700px) {
-  #signup-block {
-    padding: 50px;
-  }
-}
+
 
 .password-meter {
   height: 5px;
   border-radius: 5px;
   /* margin: 10px  */
+}
+
+#password-meter-container {
+  display: none;
+}
+
+#loading-container-signup {
+  display: none;
+}
+
+@media (max-width:700px) {
+  #signup-block {
+    padding: 50px;
+  }
 }

@@ -2,7 +2,7 @@ function validate_password(password, password_confirm, min_length) {
   let numerals = '0123456789';
   let alphabet = 'abcdefghijklmnopqstuvwxyz';
 
-  let invalid_msg = `password length must be greater than or equeal to ${min_length} and it must contain both letters and numbers. It is too weak, my friend`;
+  let invalid_msg = `password length must be greater than or equal to ${min_length} and it must contain both letters and numbers. It is too weak, my friend`;
 
   let password_not_same_msg = 'passwords did\'t match';
 

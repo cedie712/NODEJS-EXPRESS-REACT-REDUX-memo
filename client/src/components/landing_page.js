@@ -48,7 +48,7 @@ class LandingPage extends Component {
           <div id="landing_page_container_top" className="col s12 grey darken-4 center">
             <div id="top-branding" className="container">
               <h1 id="brand-title" className="light-blue-text text-lighten-1 animated bounceInDown">Memo</h1>
-              <h6 className="white-text animated bounceInRight">A cool place to dump your to-dos, notices,<br />  and what-so-ever list with no shits guarantee</h6>
+              <h6 className="white-text animated bounceInRight">A cool place to dump your to-dos, notices,<br />  and what-so-ever list with shit-free guarantee</h6>
 
               <button id="downward-landingpage" className="animated infinite bounce
               btn-floating btn-large waves-effect waves-light light-green darken-2"><i className="material-icons">arrow_downward</i></button>

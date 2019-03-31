@@ -46,9 +46,11 @@ class SignUp extends Component {
     let min_length = 8;
     let check_password = validate_password(password, confirm, min_length);
     if (password === '' && confirm === '') {
+      document.getElementById('password-meter-container').style.display = 'none';
       document.getElementById('lvl1-meter').className = 'password-meter grey lighten-1';
     }
     else {
+      document.getElementById('password-meter-container').style.display = 'block';
       if(check_password !== true) {
         document.getElementById('lvl1-meter').className = 'password-meter red';
         document.getElementById('lvl2-meter').className = 'password-meter grey lighten-1';
@@ -86,6 +88,7 @@ class SignUp extends Component {
 
 
   process_signup(event) {
+    document.getElementById('loading-container-signup').style.display = 'block';
     event.preventDefault();
     let email = this.state.email;
     let password = this.state.password;
@@ -94,12 +97,14 @@ class SignUp extends Component {
 
     for (let i in fields) {
       if (fields[i] === '') {
+      document.getElementById('loading-container-signup').style.display = 'none';
         console.log('complete the fields');
         return  M.toast({html: 'complete the fields', classes: 'rounded red darken-2'});
       }
     }
 
     if (password !== confirm) {
+      document.getElementById('loading-container-signup').style.display = 'none';
       return  M.toast({html: 'passwords did\'t match', classes: 'rounded red darken-2'});
     }
 
@@ -111,9 +116,11 @@ class SignUp extends Component {
       _csrf: localStorage.csrfToken
     })
     .then((response) => {
+      document.getElementById('loading-container-signup').style.display = 'none';
       console.log(response);
     })
     .catch((error) => {
+      document.getElementById('loading-container-signup').style.display = 'none';
       M.toast({html: error.response.data.error, classes: 'rounded red darken-2'})
     })
 
@@ -142,7 +149,7 @@ class SignUp extends Component {
               </div>
 
               {/* password_meter */}
-              <div className="row">
+              <div id="password-meter-container" className="row">
                   <div className="col s3">
                     <div id="lvl1-meter" className="password-meter grey lighten-1">
 
@@ -170,6 +177,17 @@ class SignUp extends Component {
             <button type="submit" onClick={this.process_signup} className="waves-effect waves-light light-green darken-2 btn-large">Submit<i className="material-icons large right">add_circle_outline</i></button>
             <br /><br />
             <span><Link to="/" className="white-text">already have an account ?</Link></span>
+
+
+
+            </div>
+            <br />
+            <div id="loading-container-signup" className="col s6 offset-s3 offset-s3">
+              <div className="progress">
+                  <div className="indeterminate"></div>
+              </div>
+
+              <p className="teal-text">processing request . . .</p>
             </div>
 
             </form>
