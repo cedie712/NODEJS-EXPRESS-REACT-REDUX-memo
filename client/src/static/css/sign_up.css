@@ -4,6 +4,7 @@
   padding: 150px;
   height: 100%;
   align-items: center;
+  /* display: none; */
 }
 
 
@@ -22,6 +23,18 @@
 #loading-container-signup {
   display: none;
 }
+
+
+/* confirm signup */
+#confirm-signup-container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  display: none;
+  overflow: hidden;
+}
+
 
 @media (max-width:700px) {
   #signup-block {

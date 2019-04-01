@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+// components
+import ConfirmSignUp from './confirm_signup';
+
 // css
 import '../static/css/sign_up.css'
 import M from 'materialize-css'
@@ -117,7 +120,7 @@ class SignUp extends Component {
     })
     .then((response) => {
       document.getElementById('loading-container-signup').style.display = 'none';
-      console.log(response);
+      document.getElementById('confirm-signup-container').style.display = 'block';
     })
     .catch((error) => {
       document.getElementById('loading-container-signup').style.display = 'none';
@@ -193,6 +196,9 @@ class SignUp extends Component {
             </form>
           </div>
         </div>
+
+        <ConfirmSignUp />
+
       </div>
     );
   }

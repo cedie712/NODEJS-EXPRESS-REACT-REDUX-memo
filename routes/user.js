@@ -17,7 +17,11 @@ router.use(function (err, req, res, next) {
   res.sendStatus(403)
 });
 
-/* GET home page. */
+
+// signup_verify_code
+let verification_code_signup = {};
+
+
 router.get('/signup', csrfProtection, (request, response, next) => {
   context = {csrfToken: request.csrfToken()};
   return response.json(context);
@@ -29,16 +33,6 @@ router.post('/signup', csrfProtection, (request, response, next) => {
   if (check_password !== true) {
     return response.status(400).json(check_password);
   }
-  
-
-  // proceed to email verification here
-  // emailExistence.check(request.body.email, function(email_error, email_res){
-  //   console.log(email_res);
-  //   if (!email_res) {
-  //     email_check.has_error = true;
-  //     email_check['error'] = 'bitch please, that email doesn\'t exists';
-  //   }
-  // });
 
   try {
     async function send_email() {
@@ -67,6 +61,9 @@ router.post('/signup', csrfProtection, (request, response, next) => {
 
     send_email()
     .then(() => {
+      let verfication_code = Math.floor((Math.random() * 999999) + 100000);
+      verification_code_signup[request.body._csrf] = verfication_code;
+      console.log(verification_code_signup); 
       return response.sendStatus(200);
     })
     .catch((error) => {
