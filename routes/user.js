@@ -1,11 +1,14 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const jwt = require('jsonwebtoken');
 
 const csrf = require('csurf');
 const csrfProtection = csrf({cookie: true});
 
 const validate_password = require('../custom_scripts/password_validator');
+
+
+const passport = require('passport');
 
 const nodemailer = require('nodemailer');
 const email_config = require('../config/email_config');
@@ -34,6 +37,8 @@ router.post('/signup', csrfProtection, (request, response, next) => {
     return response.status(400).json(check_password);
   }
 
+  let verfication_code = Math.floor((Math.random() * 999999) + 100000);
+
   try {
     async function send_email() {
       let transporter = nodemailer.createTransport({
@@ -47,10 +52,10 @@ router.post('/signup', csrfProtection, (request, response, next) => {
       });
   
       let mailOptions = {
-        from: 'cedrick.domingo048@gmail.com', // sender address
+        from: 'Memo', // sender address
         to: request.body.email, // list of receivers
-        subject: "Hello ✔", // Subject line
-        text: "test mail", // plain text body
+        subject: "Email Verfication for Signup Process", // Subject line
+        text: `verification code: ${verfication_code}`, // plain text body
       };
   
       let info = await transporter.sendMail(mailOptions)
@@ -61,9 +66,27 @@ router.post('/signup', csrfProtection, (request, response, next) => {
 
     send_email()
     .then(() => {
-      let verfication_code = Math.floor((Math.random() * 999999) + 100000);
-      verification_code_signup[request.body._csrf] = verfication_code;
-      console.log(verification_code_signup); 
+      verification_code_signup[request.body._csrf] = {
+        verfication_code : verfication_code,
+        email: request.body.email,
+        password: request.body.password
+      };
+
+      console.log(verification_code_signup[request.body._csrf]);
+
+      // drop the verication code after 5 mins
+      async function verification_limiter(ms) {
+        return new Promise(resolve => {
+          setTimeout(
+            () => {
+              delete verification_code_signup[request.body._csrf]
+              console.log(verification_code_signup);
+            }, 300000);
+        });
+      }
+
+      verification_limiter()
+
       return response.sendStatus(200);
     })
     .catch((error) => {
@@ -74,11 +97,20 @@ router.post('/signup', csrfProtection, (request, response, next) => {
   } catch (error) {
     console.log(error);
   }
-
-
-
-  
-
 });
+
+
+router.post('/verify_signup', csrfProtection, (request, response, next) => {
+
+  if (verification_code_signup[request.body._csrf].verfication_code === parseInt(request.body.verification_code)) {
+    passport.authenticate('local', { failureRedirect: '/signup' });
+    // return response.sendStatus(200);
+  }
+  return response.sendStatus(400);
+});
+
+
+
+
 
 module.exports = router;
