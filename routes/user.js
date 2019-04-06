@@ -106,22 +106,29 @@ router.post('/verify_signup', csrfProtection,
   if (verification_code_signup[request.body._csrf].verfication_code === parseInt(request.body.verification_code)) {
     request.body['email'] = verification_code_signup[request.body._csrf].email;
     request.body['password'] = verification_code_signup[request.body._csrf].password;
-    return next();
+    // return next();
+
+    passport.authenticate('local-signup',
+    (error, user, info) => {
+
+      //do whatever you like here
+      if (error) {
+        console.log(error)
+      }
+
+      if (info === 'user already exists') {
+        return response.status(400).json({error: info});
+      }
+
+      if (user) {
+        console.log('user created');
+        return response.status(200).json({user: user})
+      }
+
+    })(request, response, next);
   }
-  return response.sendStatus(400);
-},
-passport.authenticate('local-signup',
-(error, user, info) => {
-
-  //do whatever you like here
-
-  if (error) {
-    console.log('error')
-  }
-  console.log(user);
-  console.log(info);
-
-}));
+  return response.status(400);
+});
 
 
 

@@ -67,11 +67,13 @@ class LandingPage extends Component {
                     </div>
 
                     <div className="input-field">
+                      <i className="material-icons prefix grey-text text-darken-1">account_circle</i>
                       <input id="email-signin" type="text" className="validate" />
                       <label htmlFor="email-signin">Email</label>
                     </div>
 
                     <div className="input-field">
+                    <i className="material-icons prefix grey-text text-darken-1">lock</i>
                       <input id="password" type="password" className="validate" />
                       <label htmlFor="password">Password</label>
                     </div>

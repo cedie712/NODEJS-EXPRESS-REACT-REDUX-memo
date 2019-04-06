@@ -137,16 +137,19 @@ class SignUp extends Component {
             <form className="animated bounceInDown">
             <h3 className="orange-text">Sign up</h3>
               <div className="input-field">
+                <i className="material-icons prefix grey-text text-darken-1">account_circle</i>
                 <input id="email" name="email" onChange={this.fetch_field_value} value={this.state.email} type="text" className="light-blue-text text-lighten-3" />
                 <label htmlFor="email">Email</label>
               </div>
 
               <div className="input-field">
+                <i className="material-icons prefix grey-text text-darken-1">lock</i>
                 <input id="password-signup" name="password" onChange={this.fetch_field_value} value={this.state.password} type="password" className="light-blue-text text-lighten-3" />
                 <label htmlFor="password-signup">Password</label>
               </div>
 
               <div className="input-field">
+                <i className="material-icons prefix grey-text text-darken-1">check</i>
                 <input id="confirm-signup" name="confirm" onChange={this.fetch_field_value} value={this.state.confirm} type="password" className="light-blue-text text-lighten-3" />
                 <label htmlFor="confirm-signup">Confirm Password</label>
               </div>
@@ -197,7 +200,7 @@ class SignUp extends Component {
           </div>
         </div>
 
-        <ConfirmSignUp email={this.state.email} password={this.state.password} />
+        <ConfirmSignUp />
 
       </div>
     );

@@ -8,8 +8,6 @@
 }
 
 
-
-
 .password-meter {
   height: 5px;
   border-radius: 5px;
@@ -27,17 +25,51 @@
 
 /* confirm signup */
 #confirm-signup-container {
+  position: absolute;
+  /* display: none; */
   height: 100%;
   width: 100%;
-  position: absolute;
   top: 0;
-  display: none;
-  overflow: hidden;
+  padding: 150px;
+  /* align-items: center; */
 }
+
+  /* label color */
+  #confirm-signup-container .input-field label {
+    color: white;
+    font-size: 23px;
+  }
+  /* label focus color */
+  #confirm-signup-container .input-field input[type=text]:focus + label {
+    color: white;
+  }
+  /* label underline focus color */
+  #confirm-signup-container .input-field input[type=text]:focus {
+    border-bottom: 1px solid white;
+    box-shadow: 0 1px 0 0 white;
+  }
+  /* valid color */
+  #confirm-signup-container .input-field input[type=text].valid {
+    border-bottom: 1px solid white;
+    box-shadow: 0 1px 0 0 white;
+  }
+  /* invalid color */
+  #confirm-signup-container .input-field input[type=text].invalid {
+    border-bottom: 1px solid white;
+    box-shadow: 0 1px 0 0 white;
+  }
+  /* icon prefix focus color */
+  #confirm-signup-container .input-field .prefix.active {
+    color: white;
+  }
 
 
 @media (max-width:700px) {
   #signup-block {
+    padding: 50px;
+  }
+
+  #confirm-signup-container {
     padding: 50px;
   }
 }
