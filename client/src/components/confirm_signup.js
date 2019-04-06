@@ -22,10 +22,12 @@ class ConfirmSignUp extends Component {
     console.log(this.state);
     axios.post('/api/user/verify_signup', {
       verification_code: this.state.verification_code,
-      _csrf: localStorage.csrfToken
+      _csrf: localStorage.csrfToken,
+      // email: this.props.email,
+      // password: this.props.password
     })
     .then((response) => {
-      console.log(response);
+      console.log(response.status);
     }).catch((error) => {
       console.log(error);
     })

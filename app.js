@@ -1,11 +1,17 @@
 const createError = require('http-errors');
 const express = require('express');
+const session = require('express-session');
 const passport = require('passport');
 const path = require('path');
+const db = require('./config/database_conf');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
+
+db.authenticate()
+    .then(() => console.log('connected to the database'))
+    .catch((error) => console.log(error));
 
 
 const app = express();
@@ -16,6 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use(session({ secret: 'keyboard cat',resave: true, saveUninitialized:true}));
 app.use(passport.initialize());
 app.use(passport.session());
 require('./config/passport_local');

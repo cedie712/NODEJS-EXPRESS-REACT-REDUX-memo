@@ -9,15 +9,17 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   users.associate = function(models) {
     // associations can be defined here
-    let encrypt_password = (password) => {
-      hashed_password = bcrypt.hashSync(password, bcrypt.genSaltSync(5), null);
-      return hashed_password;
-    }
-
-    let validate_password = (password) => {
-      return bcrypt.compareSync(password, models.password);
-    }
 
   };
+
+  users.encrypt_password = (password) => {
+    hashed_password = bcrypt.hashSync(password, bcrypt.genSaltSync(5), null);
+    return hashed_password;
+  }
+
+  users.validate_password = (password) => {
+    return bcrypt.compareSync(password, this.password);
+  }
+
   return users;
 };

@@ -197,7 +197,7 @@ class SignUp extends Component {
           </div>
         </div>
 
-        <ConfirmSignUp />
+        <ConfirmSignUp email={this.state.email} password={this.state.password} />
 
       </div>
     );

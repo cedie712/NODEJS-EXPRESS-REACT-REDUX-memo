@@ -100,14 +100,28 @@ router.post('/signup', csrfProtection, (request, response, next) => {
 });
 
 
-router.post('/verify_signup', csrfProtection, (request, response, next) => {
+router.post('/verify_signup', csrfProtection,
+ (request, response, next) => {
 
   if (verification_code_signup[request.body._csrf].verfication_code === parseInt(request.body.verification_code)) {
-    passport.authenticate('local', { failureRedirect: '/signup' });
-    // return response.sendStatus(200);
+    request.body['email'] = verification_code_signup[request.body._csrf].email;
+    request.body['password'] = verification_code_signup[request.body._csrf].password;
+    return next();
   }
   return response.sendStatus(400);
-});
+},
+passport.authenticate('local-signup',
+(error, user, info) => {
+
+  //do whatever you like here
+
+  if (error) {
+    console.log('error')
+  }
+  console.log(user);
+  console.log(info);
+
+}));
 
 
 
