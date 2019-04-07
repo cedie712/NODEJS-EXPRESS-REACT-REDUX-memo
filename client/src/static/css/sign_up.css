@@ -26,12 +26,17 @@
 /* confirm signup */
 #confirm-signup-container {
   position: absolute;
-  /* display: none; */
+  display: none;
   height: 100%;
   width: 100%;
   top: 0;
-  padding: 150px;
-  /* align-items: center; */
+  padding: 200px;
+}
+
+#v-code-container {
+  padding-top: 10px;
+  padding-left: 300px;
+  padding-right: 300px;
 }
 
   /* label color */
@@ -72,4 +77,10 @@
   #confirm-signup-container {
     padding: 50px;
   }
+
+  #v-code-container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
 }

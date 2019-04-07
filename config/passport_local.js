@@ -18,7 +18,7 @@ passport.use('local-signup' ,new LocalStrategy(
         })
         .then((user) => {
             if (user) {
-                return done(null, user, 'user already exists');
+                return done(null, user, 'User already exists');
             }
 
             if(!user) {
