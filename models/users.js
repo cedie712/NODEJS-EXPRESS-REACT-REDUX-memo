@@ -17,8 +17,8 @@ module.exports = (sequelize, DataTypes) => {
     return hashed_password;
   }
 
-  users.validate_password = (password) => {
-    return bcrypt.compareSync(password, this.password);
+  users.validate_password = (password, hashed_string) => {
+    return bcrypt.compareSync(password, hashed_string);
   }
 
   return users;

@@ -9,6 +9,7 @@ import './static/css/main.css';
 // Components
 import LandingPage from './components/landing_page';
 import SignUp from './components/sign_up';
+import Main from './components/main';
 
 
 const Route = require('react-router-dom').Route;
@@ -31,6 +32,10 @@ class App extends Component {
 
           {/* signup */}
             <Route path='/signup' exact component={SignUp} />
+          {/* signup */}
+
+          {/* signup */}
+            <Route path='/main' exact component={Main} />
           {/* signup */}
 
         </div>

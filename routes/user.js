@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 
 const csrf = require('csurf');
 const csrfProtection = csrf({cookie: true});
@@ -180,6 +179,33 @@ router.post('/verify_signup', csrfProtection,(request, response, next) => {
 
   })(request, response, next);
 
+});
+
+//user-signin
+router.get('/signin', csrfProtection, function(request, response, next) {
+  context = {csrfToken: request.csrfToken()};
+  return response.json(context);
+});
+
+router.post('/signin', csrfProtection, function(request, response, next) {
+  passport.authenticate('local-signin', {
+    successRedirect: '/main',
+    failureRedirect: '/',
+  }, (error, user, info) => {
+    if (info) {
+      request.logIn(user, (error) => {
+        if (error) {
+          console.log(error);
+        }
+      });
+      return response.status(200).json({
+        csrfToken: request.csrfToken()
+      });
+    }
+
+    return response.status(403).json({error: 'Incorrect username or password'})
+
+  })(request, response, next);
 });
 
 

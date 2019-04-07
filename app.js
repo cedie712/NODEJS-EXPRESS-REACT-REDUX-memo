@@ -22,7 +22,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(session({ secret: 'keyboard cat',resave: true, saveUninitialized:true}));
+app.use(session({ secret: 'keyboard cat',resave: true, saveUninitialized:true,
+cookie: {
+    maxAge: 180 * 60 * 1000
+}}));
 app.use(passport.initialize());
 app.use(passport.session());
 require('./config/passport_local');

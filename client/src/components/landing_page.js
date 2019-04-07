@@ -1,13 +1,37 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+
+import axios from 'axios';
+
 // css
 import '../static/css/landing_page.css';
 
 import ScrollReveal from 'scrollreveal';
 
 class LandingPage extends Component {
+  constructor() {
+    super();
+    this.state = {
+      email_signin: '',
+      password_signin: ''
+    }
+
+    this.fetch_field_data = this.fetch_field_data.bind(this)
+    this.process_signin = this.process_signin.bind(this)
+
+  }
+
+  fetch_field_data(event) {
+    this.setState({[event.target.name]: event.target.value});
+  }
 
   componentDidMount() {
+
+    axios.get('/api/user/signin')
+      .then((response) => {
+        localStorage.setItem('csrfToken', response.data.csrfToken);
+      })
+      .catch(error => console.log(error));
 
     let down_btn = document.getElementById('downward-landingpage')
 
@@ -37,6 +61,20 @@ class LandingPage extends Component {
   }
 
 
+  process_signin(event) {
+    event.preventDefault();
+    axios.post('/api/user/signin', {
+      email: this.state.email_signin,
+      password: this.state.password_signin,
+      _csrf: localStorage.csrfToken
+    }).then((response) => {
+      console.log(response.data);
+    }).catch((error) => {
+      console.log(error.response.data.error);
+    });
+  }
+
+
   render() {
 
     let year_now = new Date().getFullYear();
@@ -58,7 +96,7 @@ class LandingPage extends Component {
           <div id="block-2-landing-page" className="col s12 light-blue lighten-1">
             <div className="center">
 
-              <form className="">
+              <form className="" onSubmit={this.process_signin}>
               <div id="login-card" className="card">
 
                   <div className="card-content">
@@ -68,14 +106,18 @@ class LandingPage extends Component {
 
                     <div className="input-field">
                       <i className="material-icons prefix grey-text text-darken-1">account_circle</i>
-                      <input id="email-signin" type="text" className="validate" />
-                      <label htmlFor="email-signin">Email</label>
+                      <input id="email_signin" name="email_signin"
+                      onChange={this.fetch_field_data} value={this.state.email_signin}
+                      type="text" className="validate" />
+                      <label htmlFor="email_signin">Email</label>
                     </div>
 
                     <div className="input-field">
                     <i className="material-icons prefix grey-text text-darken-1">lock</i>
-                      <input id="password" type="password" className="validate" />
-                      <label htmlFor="password">Password</label>
+                      <input id="password_signin" name="password_signin"
+                      onChange={this.fetch_field_data} value={this.state.password_signin}
+                      type="password" className="validate" />
+                      <label htmlFor="password_signin">Password</label>
                     </div>
                     <a href="/" className="red-text">forgot password?</a>
 
@@ -83,7 +125,7 @@ class LandingPage extends Component {
 
                   <div className="card-action center">
                     <span><Link to="/signup" className="orange-text">don't have an account ?</Link></span>
-                    <button id="login_submit" className="waves-effect waves-light light-green darken-2 btn">Submit                   <i className="material-icons right">send</i>
+                    <button type="submit" id="login_submit" className="waves-effect waves-light light-green darken-2 btn">Submit                   <i className="material-icons right">send</i>
                     </button>
                   </div>
 
