@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import 'materialize-css/dist/css/materialize.min.css';
 import M from 'materialize-css';
+
 import 'animate.css';
 
 import './static/css/main.css';
@@ -16,9 +17,23 @@ const Route = require('react-router-dom').Route;
 
 class App extends Component {
 
+  constructor() {
+    super();
+    this.state = {
+      user_authenticated: false
+    };
+    this.update_user_auth = this.update_user_auth.bind(this);
+  }
+
   componentDidMount() {
     //Initialize materialize
     M.AutoInit();
+  }
+
+  update_user_auth(auth_state) {
+    if(auth_state) {
+      this.setState({user_authenticated: true})
+    }
   }
 
   render() {
@@ -27,11 +42,13 @@ class App extends Component {
         <div className="App">
 
           {/* home */}
-            <Route path='/' exact component={LandingPage} />
+            <Route path='/' exact render={(props) => <LandingPage {...props} update_user_auth={this.update_user_auth}
+            user_authenticated={this.state.user_authenticated} />} />
           {/* home */}
 
           {/* signup */}
-            <Route path='/signup' exact component={SignUp} />
+            <Route path='/signup' exact render={(props) => <SignUp {...props} update_user_auth={this.update_user_auth}
+            user_authenticated={this.state.user_authenticated} />} />
           {/* signup */}
 
           {/* signup */}

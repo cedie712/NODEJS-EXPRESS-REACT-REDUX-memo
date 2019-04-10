@@ -64,7 +64,7 @@ router.post('/signup', csrfProtection, (request, response, next) => {
           });
       
           let mailOptions = {
-            from: 'Memo', // sender address
+            from: 'cedrick.domingo048@gmail.com - Memo', // sender address
             to: request.body.email, // list of receivers
             subject: "Email Verfication for Signup Process", // Subject line
             text: `verification code: ${verfication_code}`, // plain text body
@@ -77,59 +77,59 @@ router.post('/signup', csrfProtection, (request, response, next) => {
 
 
         // PRODUCTION - SEND VERIFICATION
-        // send_email()
-        // .then(() => {
-        //   verification_code_signup[request.body._csrf] = {
-        //     verfication_code : verfication_code,
-        //     email: request.body.email,
-        //     password: request.body.password
-        //   };
+        send_email()
+        .then(() => {
+          verification_code_signup[request.body._csrf] = {
+            verfication_code : verfication_code,
+            email: request.body.email,
+            password: request.body.password
+          };
 
-        //   console.log(verification_code_signup[request.body._csrf]);
+          console.log(verification_code_signup[request.body._csrf]);
 
-        //   // drop the verication code after 5 mins
-        //   async function verification_limiter(ms) {
-        //     return new Promise(resolve => {
-        //       setTimeout(
-        //         () => {
-        //           delete verification_code_signup[request.body._csrf]
-        //           console.log(verification_code_signup);
-        //         }, 300000);
-        //     });
-        //   }
+          // drop the verication code after 5 mins
+          async function verification_limiter(ms) {
+            return new Promise(resolve => {
+              setTimeout(
+                () => {
+                  delete verification_code_signup[request.body._csrf]
+                  console.log(verification_code_signup);
+                }, 300000);
+            });
+          }
 
-        //   verification_limiter()
+          verification_limiter()
 
-        //   return response.sendStatus(200);
-        // })
-        // .catch((error) => {
-        //   return response.status(400).json({error: 'Email does not exists'});
-        // })
+          return response.sendStatus(200);
+        })
+        .catch((error) => {
+          return response.status(400).json({error: 'Email does not exists'});
+        })
         // PRODUCTION - SEND VERIFICATION
 
         // TESTING
-        verification_code_signup[request.body._csrf] = {
-          verfication_code : verfication_code,
-          email: request.body.email,
-          password: request.body.password
-        };
+        // verification_code_signup[request.body._csrf] = {
+        //   verfication_code : verfication_code,
+        //   email: request.body.email,
+        //   password: request.body.password
+        // };
 
-        console.log(verification_code_signup[request.body._csrf]);
+        // console.log(verification_code_signup[request.body._csrf]);
 
-        // drop the verication code after 5 mins
-        async function verification_limiter(ms) {
-          return new Promise(resolve => {
-            setTimeout(
-              () => {
-                delete verification_code_signup[request.body._csrf]
-                console.log(verification_code_signup);
-              }, 300000);
-          });
-        }
+        // // drop the verication code after 5 mins
+        // async function verification_limiter(ms) {
+        //   return new Promise(resolve => {
+        //     setTimeout(
+        //       () => {
+        //         delete verification_code_signup[request.body._csrf]
+        //         console.log(verification_code_signup);
+        //       }, 300000);
+        //   });
+        // }
 
-        verification_limiter()
+        // verification_limiter()
 
-        return response.sendStatus(200);
+        // return response.sendStatus(200);
         // TESTING
       
       } catch (error) {
@@ -170,11 +170,23 @@ router.post('/verify_signup', csrfProtection,(request, response, next) => {
 
     if (user) {
       console.log('user created');
-      user_info = {
-        email: request.body['email'],
-        password: request.body['password']
-      }
-      return response.status(200).json({user: user_info})
+ 
+      passport.authenticate('local-signin', {
+        successRedirect: '/main',
+        failureRedirect: '/',
+      }, (error, user, info) => {
+        if (info) {
+          request.logIn(user, (error) => {
+            if (error) {
+              console.log(error);
+            }
+          });
+          return response.status(200).json({
+            csrfToken: request.csrfToken()
+          });
+        }
+      })(request, response, next);
+
     }
 
   })(request, response, next);

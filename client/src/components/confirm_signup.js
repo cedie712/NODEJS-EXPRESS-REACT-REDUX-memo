@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import M from 'materialize-css';
+import { Redirect } from 'react-router-dom';
 
 class ConfirmSignUp extends Component {
   constructor() {
     super();
     this.state = {
-      verification_code: ''
+      verification_code: '',
     }
 
     this.fetch_code_value = this.fetch_code_value.bind(this);
@@ -32,14 +33,22 @@ class ConfirmSignUp extends Component {
       _csrf: localStorage.csrfToken,
     })
     .then((response) => {
-      console.log(response.data.user);
+      if (response.status === 200) {
+        return this.props.update_user_auth(true);
+      }
     }).catch((error) => {
+
+    console.log(error);
       console.log(error.response.data.error);
-      M.toast({html: error.response.data.error, classes: 'rounded red darken-2'})
+      return M.toast({html: error.response.data.error, classes: 'rounded red darken-2'})
     })
   }
 
   render() {
+    if (this.props.user_authenticated) {
+      return <Redirect to="/main" />
+    }
+    
     return (
       <div className="ConfirmSignUp">
         <div id="confirm-signup-container" className="light-blue lighten-1 animated bounceInRight">

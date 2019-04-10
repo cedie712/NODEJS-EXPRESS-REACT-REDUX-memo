@@ -200,7 +200,7 @@ class SignUp extends Component {
           </div>
         </div>
 
-        <ConfirmSignUp />
+        <ConfirmSignUp user_authenticated={this.props.user_authenticated} update_user_auth={this.props.update_user_auth} />
 
       </div>
     );

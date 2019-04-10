@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -76,6 +76,9 @@ class LandingPage extends Component {
 
 
   render() {
+    if (this.props.user_authenticated) {
+      return <Redirect to="/main" />
+    }
 
     let year_now = new Date().getFullYear();
 
