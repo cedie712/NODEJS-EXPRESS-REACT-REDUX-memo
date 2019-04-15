@@ -7,6 +7,11 @@ const passport = require('passport');
 const models = require('../models');
 
 /* GET home page. */
+// router.use(function (err, req, res, next) {
+//   if (err.code !== 'EBADCSRFTOKEN') return next(err)
+
+//   res.sendStatus(403)
+// });
 
 function login_required (request, response, next) {
   console.log(request.isAuthenticated());
@@ -17,8 +22,9 @@ function login_required (request, response, next) {
   // console.log(request._parsedOriginalUrl.path);
 }
 
-router.get('/main', login_required, function(request, response, next) {
-  console.log('im requested');  
+router.use(login_required);
+
+router.get('/main', function(request, response, next) {
   context = {msg: 'woot woot'};
   return response.json(context);
 });

@@ -6,6 +6,7 @@ const path = require('path');
 const db = require('./config/database_conf');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const Fingerprint = require('express-fingerprint')
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 
@@ -15,6 +16,15 @@ db.authenticate()
 
 
 const app = express();
+ 
+app.use(Fingerprint({
+    parameters:[
+        // Defaults
+        Fingerprint.useragent,
+        Fingerprint.acceptHeaders,
+        Fingerprint.geoip,
+    ]
+}));
 
 
 app.use(logger('dev'));

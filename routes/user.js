@@ -22,6 +22,14 @@ router.use(function (err, req, res, next) {
 });
 
 
+function is_loggedin(request, response, next) {
+  if (request.isAuthenticated()) {
+    response.status(200).json({is_authenticated: true});
+  }
+
+  return next();
+}
+
 // signup_verify_code
 let verification_code_signup = {};
 
@@ -106,31 +114,6 @@ router.post('/signup', csrfProtection, (request, response, next) => {
           return response.status(400).json({error: 'Email does not exists'});
         })
         // PRODUCTION - SEND VERIFICATION
-
-        // TESTING
-        // verification_code_signup[request.body._csrf] = {
-        //   verfication_code : verfication_code,
-        //   email: request.body.email,
-        //   password: request.body.password
-        // };
-
-        // console.log(verification_code_signup[request.body._csrf]);
-
-        // // drop the verication code after 5 mins
-        // async function verification_limiter(ms) {
-        //   return new Promise(resolve => {
-        //     setTimeout(
-        //       () => {
-        //         delete verification_code_signup[request.body._csrf]
-        //         console.log(verification_code_signup);
-        //       }, 300000);
-        //   });
-        // }
-
-        // verification_limiter()
-
-        // return response.sendStatus(200);
-        // TESTING
       
       } catch (error) {
         console.log(error);
@@ -194,12 +177,12 @@ router.post('/verify_signup', csrfProtection,(request, response, next) => {
 });
 
 //user-signin
-router.get('/signin', csrfProtection, function(request, response, next) {
+router.get('/signin', [is_loggedin, csrfProtection], function(request, response, next) {
   context = {csrfToken: request.csrfToken()};
   return response.json(context);
 });
 
-router.post('/signin', csrfProtection, function(request, response, next) {
+router.post('/signin', csrfProtection, (request, response, next) => {
   passport.authenticate('local-signin', {
     successRedirect: '/main',
     failureRedirect: '/',
@@ -210,6 +193,7 @@ router.post('/signin', csrfProtection, function(request, response, next) {
           console.log(error);
         }
       });
+
       return response.status(200).json({
         csrfToken: request.csrfToken()
       });
@@ -219,6 +203,5 @@ router.post('/signin', csrfProtection, function(request, response, next) {
 
   })(request, response, next);
 });
-
 
 module.exports = router;

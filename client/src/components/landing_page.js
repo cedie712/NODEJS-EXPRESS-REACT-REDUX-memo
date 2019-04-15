@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
-
 import axios from 'axios';
 
 // css
@@ -13,7 +12,8 @@ class LandingPage extends Component {
     super();
     this.state = {
       email_signin: '',
-      password_signin: ''
+      password_signin: '',
+      is_authenticated: false,
     }
 
     this.fetch_field_data = this.fetch_field_data.bind(this)
@@ -25,13 +25,19 @@ class LandingPage extends Component {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  componentDidMount() {
-
+  componentWillMount() {
     axios.get('/api/user/signin')
       .then((response) => {
+        if (response.data.is_authenticated) {
+          return this.setState({is_authenticated: true});
+        }
         localStorage.setItem('csrfToken', response.data.csrfToken);
       })
       .catch(error => console.log(error));
+
+  }
+
+  componentDidMount() {
 
     let down_btn = document.getElementById('downward-landingpage')
 
@@ -69,14 +75,19 @@ class LandingPage extends Component {
       _csrf: localStorage.csrfToken
     }).then((response) => {
       console.log(response.data);
+      this.setState({is_authenticated: true});
+      localStorage.setItem('csrfToken', response.data.csrfToken)
+      // this.props.authenticateUser();
     }).catch((error) => {
-      console.log(error.response.data.error);
+      console.log(error)
+      // console.log(error.response.data.error);
     });
   }
 
 
   render() {
-    if (this.props.user_authenticated) {
+    // console.log(this.props.user_authenticated);
+    if (this.state.is_authenticated) {
       return <Redirect to="/main" />
     }
 
@@ -127,9 +138,17 @@ class LandingPage extends Component {
                   </div>
 
                   <div className="card-action center">
-                    <span><Link to="/signup" className="orange-text">don't have an account ?</Link></span>
-                    <button type="submit" id="login_submit" className="waves-effect waves-light light-green darken-2 btn">Submit                   <i className="material-icons right">send</i>
+                    <span><Link to="/signup" className="orange-text">wanna create an account ?</Link></span>
+                    <button type="submit" id="login_submit" className="waves-effect waves-light light-green darken-2 btn">Sign In                   <i className="material-icons right">send</i>
                     </button>
+                    <br />
+
+                  <div>or</div>
+                  <br />
+
+                  <button type="submit" onClick={this.process_signup} className="waves-effect waves-light red darken-1 btn"><i className="fab fa-google-plus-g"></i>&nbsp; Sign-in with Google</button>
+                  <br />
+
                   </div>
 
               </div> 

@@ -1,7 +1,8 @@
 #signup-block {
   position: absolute;
   display: grid;
-  padding: 150px;
+  padding-left: 150px;
+  padding-right: 150px;
   height: 100%;
   align-items: center;
   /* display: none; */
