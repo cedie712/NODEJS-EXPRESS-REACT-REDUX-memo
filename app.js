@@ -6,9 +6,9 @@ const path = require('path');
 const db = require('./config/database_conf');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const Fingerprint = require('express-fingerprint')
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
+const keys = require('./config/keys');
 
 db.authenticate()
     .then(() => console.log('connected to the database'))
@@ -16,29 +16,22 @@ db.authenticate()
 
 
 const app = express();
- 
-app.use(Fingerprint({
-    parameters:[
-        // Defaults
-        Fingerprint.useragent,
-        Fingerprint.acceptHeaders,
-        Fingerprint.geoip,
-    ]
-}));
-
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(session({ secret: 'keyboard cat',resave: true, saveUninitialized:true,
+app.use(session({ secret: keys.session_secret,resave: true, saveUninitialized:true,
 cookie: {
     maxAge: 180 * 60 * 1000
 }}));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// passport strategies
 require('./config/passport_local');
+require('./config/passport_google_oauth');
 
 
 app.use('/api/user', userRouter);

@@ -176,7 +176,7 @@ router.post('/verify_signup', csrfProtection,(request, response, next) => {
 
 });
 
-//user-signin
+//user-signin-local
 router.get('/signin', [is_loggedin, csrfProtection], function(request, response, next) {
   context = {csrfToken: request.csrfToken()};
   return response.json(context);
@@ -202,6 +202,15 @@ router.post('/signin', csrfProtection, (request, response, next) => {
     return response.status(403).json({error: 'Incorrect username or password'})
 
   })(request, response, next);
+});
+
+
+// user signin google-oauth20
+router.get('/google/auth/', passport.authenticate('google', { scope: ['email profile'] }));
+
+// Callback URI
+router.get('/google/auth/redirect', passport.authenticate('google'), (request, response, next) => {
+  response.send('woot wooot');
 });
 
 module.exports = router;
