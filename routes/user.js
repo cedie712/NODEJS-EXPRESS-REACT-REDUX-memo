@@ -22,13 +22,13 @@ router.use(function (err, req, res, next) {
 });
 
 
-function is_loggedin(request, response, next) {
-  if (request.isAuthenticated()) {
-    response.status(200).json({is_authenticated: true});
-  }
+// function is_loggedin(request, response, next) {
+//   if (request.isAuthenticated()) {
+//     return response.status(200).json({csrfToken: request.csrfToken(), });
+//   }
 
-  return next();
-}
+//   return next();
+// }
 
 // signup_verify_code
 let verification_code_signup = {};
@@ -177,12 +177,18 @@ router.post('/verify_signup', csrfProtection,(request, response, next) => {
 });
 
 //user-signin-local
-router.get('/signin', [is_loggedin, csrfProtection], function(request, response, next) {
+router.get('/signin', csrfProtection, function(request, response, next) {
   context = {csrfToken: request.csrfToken()};
+  if (request.isAuthenticated()) {
+    context['is_authenticated'] = true;
+  }
   return response.json(context);
 });
 
 router.post('/signin', csrfProtection, (request, response, next) => {
+  if (request.body.email === '' || request.body.password === '') {
+    return response.status(400).json({error: 'complete the fields'});
+  }
   passport.authenticate('local-signin', {
     successRedirect: '/main',
     failureRedirect: '/',
@@ -210,7 +216,12 @@ router.get('/google/auth/', passport.authenticate('google', { scope: ['email pro
 
 // Callback URI
 router.get('/google/auth/redirect', passport.authenticate('google'), (request, response, next) => {
-  response.send('woot wooot');
+  response.redirect('http://localhost:8000/main');
 });
+
+router.get('/signout', (request, response, next) => {
+  request.logOut();
+  response.send('logged out');
+})
 
 module.exports = router;

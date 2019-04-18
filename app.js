@@ -4,6 +4,7 @@ const session = require('express-session');
 const passport = require('passport');
 const path = require('path');
 const db = require('./config/database_conf');
+const database_keys = require('./config/config.json');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const indexRouter = require('./routes/index');
@@ -22,10 +23,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(session({ secret: keys.session_secret,resave: true, saveUninitialized:true,
-cookie: {
-    maxAge: 180 * 60 * 1000
-}}));
+const conObject = {
+    user: database_keys.development.username,
+    password: database_keys.development.password,
+    host: 'localhost',
+    port: 5432,
+    database: database_keys.development.database
+};
+
+const pgSession = require('connect-pg-simple')(session);
+
+app.use(session({
+    store: new pgSession({conObject: conObject}),
+    secret: keys.session_secret,
+    resave: false,
+    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days,
+    saveUninitialized: true,
+  }));
 app.use(passport.initialize());
 app.use(passport.session());
 

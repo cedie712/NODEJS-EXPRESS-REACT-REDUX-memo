@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
+import M from 'materialize-css'
 
 // css
 import '../static/css/landing_page.css';
@@ -28,6 +29,7 @@ class LandingPage extends Component {
   componentWillMount() {
     axios.get('/api/user/signin')
       .then((response) => {
+        console.log(response.data);
         if (response.data.is_authenticated) {
           return this.setState({is_authenticated: true});
         }
@@ -38,7 +40,8 @@ class LandingPage extends Component {
   }
 
   componentDidMount() {
-
+    M.AutoInit();
+    
     let down_btn = document.getElementById('downward-landingpage')
 
     down_btn.addEventListener('click', () => {
@@ -69,6 +72,11 @@ class LandingPage extends Component {
 
   process_signin(event) {
     event.preventDefault();
+
+    if (this.state.email_signin === '' || this.state.password_signin === '') {
+      return M.toast({html: 'complete the fields', classes: 'rounded red darken-2'})
+    }
+
     axios.post('/api/user/signin', {
       email: this.state.email_signin,
       password: this.state.password_signin,
@@ -79,8 +87,8 @@ class LandingPage extends Component {
       localStorage.setItem('csrfToken', response.data.csrfToken)
       // this.props.authenticateUser();
     }).catch((error) => {
-      console.log(error)
-      // console.log(error.response.data.error);
+      console.log(error.response.data.error)
+      return M.toast({html: error.response.data.error, classes: 'rounded red darken-2'})
     });
   }
 
@@ -143,10 +151,10 @@ class LandingPage extends Component {
                     </button>
                     <br />
 
-                  <div>or</div>
+                  <div className="grey-text">or</div>
                   <br />
 
-                  <button type="submit" onClick={this.process_signup} className="waves-effect waves-light red darken-1 btn"><i className="fab fa-google-plus-g"></i>&nbsp; Sign-in with Google</button>
+                  <b><a href="http://localhost:3000/api/user/google/auth/" className="red-text"><i className="fab fa-google-plus-g"></i>&nbsp; Sign-in with Google</a></b>
                   <br />
 
                   </div>

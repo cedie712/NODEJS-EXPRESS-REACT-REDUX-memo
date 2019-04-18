@@ -1,3 +1,31 @@
 #main-container {
     display: none;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+#central-container {
+    margin-top: 20px;
+}
+
+
+#new-memo-modal {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    justify-items: center;
+}
+
+#new-modal-form-holder {
+    margin-top: 80px;
+    width: 800px;
+    height: 500px;
+    background-color: aqua;
+    border-radius: 30px;
+}
+
+#add-memo-toggler {
+    cursor: pointer;
 }

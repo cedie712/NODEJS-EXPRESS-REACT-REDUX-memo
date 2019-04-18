@@ -25,6 +25,7 @@ function login_required (request, response, next) {
 router.use(login_required);
 
 router.get('/main', function(request, response, next) {
+  console.log(request.user.id);
   context = {msg: 'woot woot'};
   return response.json(context);
 });
