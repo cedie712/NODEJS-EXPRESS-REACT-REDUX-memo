@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 
+//components
+import NewMemo from  './main_components/new_memo';
+
 //static
 import '../static/css/main_index.css';
 
@@ -48,7 +51,7 @@ class Main extends Component {
 
               <div className="col s3">
                 <div>
-                <i id="add-memo-toggler" onClick={this.show_add_memo_modal} className="large material-icons light-green-text text-darken-2 animated bounceInLeft">add</i>
+                <i id="add-memo-toggler" onClick={this.show_add_memo_modal} className="large material-icons light-blue-text text-lighten-1 animated bounceInLeft">add</i>
                 </div>
               </div>
 
@@ -57,10 +60,7 @@ class Main extends Component {
         </div>
 
       {/* MODALS */}
-      <div id="new-memo-modal" className="">
-        <div id="new-modal-form-holder" className="animated bounceInDown">
-        </div>
-      </div>
+        <NewMemo />
       {/* MODALS */}
 
       </div>

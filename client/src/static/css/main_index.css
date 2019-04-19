@@ -22,10 +22,47 @@
     margin-top: 80px;
     width: 800px;
     height: 500px;
-    background-color: aqua;
     border-radius: 30px;
+    padding: 35px;
+}
+
+
+  /* label color */
+  #new-modal-form-holder .input-field label {
+    color: black;
+    font-size: 23px;
+  }
+  /* label focus color */
+  #new-modal-form-holder .input-field input[type=text]:focus + label {
+    color:  black;
+  }
+
+  #new-modal-form-holder .input-field input[type=text]{
+    border-bottom: 1px solid  black;
+    box-shadow: 0 1px 0 0  black;
+  }
+
+  /* label underline focus color */
+  #new-modal-form-holder .input-field input[type=text]:focus {
+    border-bottom: 1px solid  black;
+    box-shadow: 0 1px 0 0  black;
+  }
+
+/* icon prefix focus color */
+    #new-modal-form-holder .input-field .prefix.active {
+        color:  black;
 }
 
 #add-memo-toggler {
     cursor: pointer;
+}
+
+#new_memo_content {
+    height: 250px;
+    border-color: whitesmoke;
+    background-color: whitesmoke;
+    border-radius: 10px;
+    padding: 10px;
+    outline: none;
+    resize: none;
 }
