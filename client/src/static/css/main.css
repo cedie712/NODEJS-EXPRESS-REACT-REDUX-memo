@@ -10,3 +10,12 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+.datepicker {
+  width: auto !important;
+}
+
+.dp-calendar-day {
+  width: 35px !important;
+  height: 30px !important;
+  }

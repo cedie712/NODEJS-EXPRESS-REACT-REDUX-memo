@@ -51,7 +51,7 @@ class Main extends Component {
 
               <div className="col s3">
                 <div>
-                <i id="add-memo-toggler" onClick={this.show_add_memo_modal} className="large material-icons light-blue-text text-lighten-1 animated bounceInLeft">add</i>
+                <i id="add-memo-toggler" onClick={this.show_add_memo_modal} className="large material-icons light-blue-text text-lighten-1 animated bounceInLeft">create</i>
                 </div>
               </div>
 

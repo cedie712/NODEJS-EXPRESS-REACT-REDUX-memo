@@ -19,9 +19,9 @@
 }
 
 #new-modal-form-holder {
-    margin-top: 80px;
+    margin-top: 50px;
     width: 800px;
-    height: 500px;
+    height: 550px;
     border-radius: 30px;
     padding: 35px;
 }
@@ -29,28 +29,32 @@
 
   /* label color */
   #new-modal-form-holder .input-field label {
-    color: black;
+    color: white;
     font-size: 23px;
   }
   /* label focus color */
   #new-modal-form-holder .input-field input[type=text]:focus + label {
-    color:  black;
+    color:  white;
   }
 
   #new-modal-form-holder .input-field input[type=text]{
-    border-bottom: 1px solid  black;
-    box-shadow: 0 1px 0 0  black;
+    border-bottom: 1px solid  white;
+    box-shadow: 0 1px 0 0  white;
   }
 
   /* label underline focus color */
   #new-modal-form-holder .input-field input[type=text]:focus {
-    border-bottom: 1px solid  black;
-    box-shadow: 0 1px 0 0  black;
+    border-bottom: 1px solid  white;
+    box-shadow: 0 1px 0 0  white;
   }
 
 /* icon prefix focus color */
     #new-modal-form-holder .input-field .prefix.active {
-        color:  black;
+        color:  white;
+}
+
+#new_memo_due_date, #new_memo_title {
+  color: white;
 }
 
 #add-memo-toggler {
@@ -65,4 +69,56 @@
     padding: 10px;
     outline: none;
     resize: none;
+}
+
+#new-memo-close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+
+#save-new-memo-mobile {
+  position: absolute;
+  display: none;
+  right: 50px;
+  top: 5px;
+}
+
+#save-new-memo{
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+
+  #new-modal-form-holder {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    border-radius: 0; 
+  }
+
+  #new-memo-close {
+    position: absolute;
+    right: 0;
+    top: 5px;
+  }
+
+  #save-new-memo{
+    display: none;
+  }
+
+
+#save-new-memo-mobile {
+  display: block;
+}
+
+  #new_memo_content {
+    height: 420px;
+  } 
+
 }
