@@ -19,3 +19,11 @@ html {
   width: 35px !important;
   height: 30px !important;
   }
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+li {
+  list-style: none;
+}

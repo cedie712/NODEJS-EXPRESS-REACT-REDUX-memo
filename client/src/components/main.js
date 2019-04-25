@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { fetch_posts } from '../actions/fetch_posts_action';
 
 //components
 import NewMemo from  './main_components/new_memo';
+import Posts from './main_components/posts';
 
 //static
 import '../static/css/main_index.css';
@@ -18,10 +21,10 @@ class Main extends Component {
     this.show_add_memo_modal = this.show_add_memo_modal.bind(this);
   }
 
+
   check_auth() {
       axios.get('/api/main')
         .then((response) => {
-            console.log(response.data);
             this.setState({is_authenticated: true})
         })
         .catch((error) => {
@@ -40,6 +43,7 @@ class Main extends Component {
   }
 
   render() {
+    
     if (this.state.is_authenticated) {
       document.getElementById('main-container').style.display = "block";
     }
@@ -51,8 +55,14 @@ class Main extends Component {
 
               <div className="col s3">
                 <div>
-                <i id="add-memo-toggler" onClick={this.show_add_memo_modal} className="large material-icons light-blue-text text-lighten-1 animated bounceInLeft">create</i>
+                <i id="add-memo-toggler" onClick={this.show_add_memo_modal} className="medium material-icons light-blue-text text-lighten-1 animated bounceInLeft">create</i>
                 </div>
+              </div>
+
+              <div className="col s6">
+                {/* POSTS */}
+                <Posts />
+                {/* POSTS */}
               </div>
 
             </div>
@@ -68,4 +78,9 @@ class Main extends Component {
   }
 }
 
-export default Main;
+const mapStateToProps = state => ({
+  posts: state.posts.items,
+  post: state.posts.item
+});
+
+export default connect(mapStateToProps, {fetch_posts})(Main);

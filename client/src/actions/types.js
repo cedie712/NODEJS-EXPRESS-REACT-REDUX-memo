@@ -1,2 +1,2 @@
-export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
-export const CHECK_AUTH = 'CHECK_AUTH';
+export const FETCH_POSTS = 'FETCH_POSTS';
+export const CREATE_POST = 'CREATE_POST';

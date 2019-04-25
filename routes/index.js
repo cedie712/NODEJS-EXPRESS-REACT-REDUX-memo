@@ -26,7 +26,7 @@ router.use(login_required);
 
 router.get('/main', (request, response, next) => {
   console.log(request.user.id);
-  context = {msg: 'woot woot'};
+  context = {msg: 'user authenticated'};
   return response.json(context);
 });
 
@@ -41,8 +41,20 @@ router.post('/save_new_memo', (request, response, next) => {
     post_body: content,
     post_due_date: due_date
   }).then((post) => {
-    return response.json({data: post})
+    return response.json({post: post})
   }).catch(error => console.log(error));
-})
+});
+
+
+// fetch memos
+router.get('/all_memos', (request, response, next) => {
+  models.posts.findAll({
+    where: {
+      user_id: request.user.id
+    }
+  }).then((posts) => {
+    return response.status(200).json(posts);
+  }).catch(error => console.log(error));
+});
 
 module.exports = router;

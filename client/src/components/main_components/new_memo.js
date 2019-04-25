@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { create_post } from '../../actions/create_post_action';
 import M from 'materialize-css';
 
 class NewMemo extends Component {
@@ -19,6 +20,9 @@ class NewMemo extends Component {
     M.AutoInit();
   }
 
+ 
+
+
   fetch_field_data(event) {
     this.setState({[event.target.name]: event.target.value});
   }
@@ -29,14 +33,13 @@ class NewMemo extends Component {
     if (this.state.new_memo_title === '' || this.state.new_memo_content === '') {
       return M.toast({html: 'complete the fucking required fields', classes: 'rounded red darken-2'})
     }
-    axios.post('/api/save_new_memo', {
+    this.props.create_post({
       new_memo_content: this.state.new_memo_content,
       new_memo_title: this.state.new_memo_title,
       new_memo_due_date: due_date
     }).then((response) => {
-      console.log(response);
-      this.close_new_memo_modal();
-    }).catch((error) => console.log(error));
+          this.close_new_memo_modal();
+      }).catch((error) => console.log(error));
   }
 
   close_new_memo_modal() {
@@ -99,4 +102,9 @@ class NewMemo extends Component {
   }
 }
 
-export default NewMemo;
+
+const mapStateToProps = state => ({
+  posts: state.posts.items,
+});
+
+export default connect(mapStateToProps, {create_post})(NewMemo);
