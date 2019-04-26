@@ -53,13 +53,13 @@ class Main extends Component {
           <div id="central-container" className="row">
             <div className="container">
 
-              <div className="col s3">
+              <div className="col s2 center">
                 <div>
                 <i id="add-memo-toggler" onClick={this.show_add_memo_modal} className="medium material-icons light-blue-text text-lighten-1 animated bounceInLeft">create</i>
                 </div>
               </div>
 
-              <div className="col s6">
+              <div className="col s8">
                 {/* POSTS */}
                 <Posts />
                 {/* POSTS */}

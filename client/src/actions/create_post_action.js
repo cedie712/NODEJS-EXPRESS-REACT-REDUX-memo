@@ -5,11 +5,11 @@ export const create_post = (data) => dispatch => {
     return axios.post('/api/save_new_memo', {
         new_memo_content: data.new_memo_content,
         new_memo_title: data.new_memo_title,
-        new_memo_due_date: data.due_date
+        new_memo_due_date: data.new_memo_due_date
       }).then((response) => {
         dispatch({
             type: CREATE_POST,
-            payload: response.data
+            payload: response.data.post
         })
         return response.data
       }).catch((error) => console.log(error));

@@ -1,12 +1,12 @@
 import { FETCH_POSTS } from './types';
 import axios from 'axios';
 
-export const fetch_posts = () => dispatch => {
+export const fetch_posts = (pager) => dispatch => {
     axios.get('api/all_memos')
     .then((response) => {
       dispatch({
         type: FETCH_POSTS,
-        payload: response.data
+        payload: response.data.reverse().splice(pager, pager + 5)
     })
     })
     .catch(error => console.log(error));
