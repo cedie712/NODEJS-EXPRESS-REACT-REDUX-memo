@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withRouter, Redirect } from 'react-router'
 import { connect } from 'react-redux';
 import { fetch_posts } from '../../actions/fetch_posts_action';
 
@@ -6,12 +7,8 @@ import { fetch_posts } from '../../actions/fetch_posts_action';
 // import 'materialize-css';
 
 class Posts extends Component {
-  constructor() {
-    super()
-    this.pager = 0;
-  }
     componentWillMount() {
-        this.props.fetch_posts(this.pager);
+        this.props.fetch_posts(this.props.match.params.splice);
     }
 
     
@@ -23,9 +20,8 @@ class Posts extends Component {
 
     
     next() {
-      console.log('im next')
-      this.pager = this.pager + 5;
-      this.props.fetch_posts(this.pager);
+      console.log('im clicked')
+      window.location = "/main/" + (parseInt(this.props.match.params.splice) + 5);
     }
 
     retrieve_posts () {
@@ -48,7 +44,9 @@ class Posts extends Component {
     
 
     render() {
-
+        // if (this.next_fuck) {
+        //   return <Redirect to={'/main/' + this.props.match.params.splice++} />
+        // }
         return (
         <div className="Posts">
             <div id="rendered-post">
@@ -60,9 +58,11 @@ class Posts extends Component {
     }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => {
+  return {
     posts: state.posts.items,
     post: state.posts.item
-  });
+  }
+}
   
-  export default connect(mapStateToProps, {fetch_posts})(Posts);
+  export default withRouter(connect(mapStateToProps, {fetch_posts})(Posts));

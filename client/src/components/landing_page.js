@@ -27,6 +27,7 @@ class LandingPage extends Component {
   }
 
   componentWillMount() {
+
     axios.get('/api/user/signin')
       .then((response) => {
         console.log(response.data);
@@ -96,7 +97,7 @@ class LandingPage extends Component {
   render() {
     // console.log(this.props.user_authenticated);
     if (this.state.is_authenticated) {
-      return <Redirect to="/main" />
+      return <Redirect to={"/main/0"} />
     }
 
     let year_now = new Date().getFullYear();
