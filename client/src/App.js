@@ -39,9 +39,10 @@ class App extends Component {
                 <Route path='/signup' exact render={(props) => <SignUp {...props} />} />
               {/* signup */}
 
-              {/* signup */}
+              {/* main */}
+                {/* <Route path={'/main'} render={(props) => <RedirectToMain {...props} />} /> */}
                 <Route path={'/main/:splice'} render={(props) => <Main {...props} />} />
-              {/* signup */}
+              {/* main */}
 
             </div>
           </Router>

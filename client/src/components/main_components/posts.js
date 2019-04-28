@@ -33,10 +33,16 @@ class Posts extends Component {
                 }
               
               return (<li key={post.id}>
-                  <h4 className="grey-text uppercase">{post.post_title}</h4>
+                  <h4 className="grey-text uppercase"><i className="material-icons">note</i>&nbsp;{post.post_title}</h4>
                   <p className="white-text" id="post-body">{post.post_body}</p>
                   {post_due_date}
-                  <hr></hr><br />
+                  <div className="right-align">
+                    <label>
+                      <input type="checkbox" />
+                      <span></span>
+                    </label>
+                  </div>
+                 <br /><hr></hr><br />
               </li>)
       });
       return posts
