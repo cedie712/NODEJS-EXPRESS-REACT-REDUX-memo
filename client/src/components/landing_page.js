@@ -97,7 +97,7 @@ class LandingPage extends Component {
   render() {
     // console.log(this.props.user_authenticated);
     if (this.state.is_authenticated) {
-      return <Redirect to={"/main/0"} />
+      return <Redirect to={"/main"} />
     }
 
     let year_now = new Date().getFullYear();

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter, Redirect } from 'react-router'
+import { withRouter } from 'react-router'
 import { connect } from 'react-redux';
 import { fetch_posts } from '../../actions/fetch_posts_action';
 
@@ -7,8 +7,21 @@ import { fetch_posts } from '../../actions/fetch_posts_action';
 // import 'materialize-css';
 
 class Posts extends Component {
-    componentWillMount() {
-        this.props.fetch_posts(this.props.match.params.splice);
+  constructor() {
+    super();
+    this.state = {
+      offset: 0
+    }
+  }
+
+    componentDidMount() {
+        this.props.fetch_posts(this.state.offset);
+    }
+
+    componentDidUpdate() {
+      if (this.state.offset >= (this.props.count - 5)) {
+        document.getElementById('next').style.display = 'none';
+      }
     }
 
     
@@ -16,18 +29,20 @@ class Posts extends Component {
         if (nextProps.post) {
           this.props.posts.unshift(nextProps.post);
         }
-      }
+        // this.props.fetch_posts(this.props.match.params.splice);
+    }
 
-    
     next() {
-      console.log('im clicked')
-      window.location = "/main/" + (parseInt(this.props.match.params.splice) + 5);
+      this.setState({offset: this.state.offset + 5},
+        () => {
+          this.props.fetch_posts(this.state.offset);
+        });
     }
 
     retrieve_posts () {
+
       let posts = this.props.posts.map((post) => {
-        console.log(post)
-              let post_due_date = null;
+              let post_due_date = null;   
               if (post.post_due_date) {
                   post_due_date = <h5 className="grey-text">Due Date: {post.post_due_date}</h5>;
                 }
@@ -44,7 +59,7 @@ class Posts extends Component {
                   </div>
                  <br /><hr></hr><br />
               </li>)
-      });
+      }); 
       return posts
     }
     
@@ -67,7 +82,8 @@ class Posts extends Component {
 const mapStateToProps = (state) => {
   return {
     posts: state.posts.items,
-    post: state.posts.item
+    post: state.posts.item,
+    count: state.posts.count
   }
 }
   

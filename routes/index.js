@@ -47,14 +47,29 @@ router.post('/save_new_memo', (request, response, next) => {
 
 
 // fetch memos
-router.get('/all_memos', (request, response, next) => {
+router.post('/all_memos', (request, response, next) => {
+  console.log(request.body.offset);
   models.posts.findAll({
     where: {
-      user_id: request.user.id
-    }
+      user_id: request.user.id,
+    },
+    limit: 5,
+    offset: request.body.offset
   }).then((posts) => {
-    return response.status(200).json(posts);
+    models.posts.count({
+      where: {
+        user_id: request.user.id,
+      }
+    }).then((count) => {
+      console.log(count);
+      for (i in posts) {
+        console.log(posts[i].id);
+      }
+      return response.status(200).json({items: posts, count});
+    })
   }).catch(error => console.log(error));
 });
+
+//
 
 module.exports = router;
