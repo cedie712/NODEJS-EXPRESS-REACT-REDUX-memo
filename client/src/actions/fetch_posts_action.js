@@ -9,7 +9,7 @@ export const fetch_posts = (offset) => dispatch => {
       dispatch({
         type: FETCH_POSTS,
         payload: {
-          posts: response.data.items.reverse(),
+          posts: response.data.items,
           count: response.data.count
         }
     })

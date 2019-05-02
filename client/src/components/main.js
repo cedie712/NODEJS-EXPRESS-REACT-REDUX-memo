@@ -53,16 +53,32 @@ class Main extends Component {
           <div id="central-container" className="row">
             <div className="container">
 
-              <div className="col s2 center">
-                <div>
-                <i id="add-memo-toggler" onClick={this.show_add_memo_modal} className="medium material-icons light-blue-text text-lighten-1 animated bounceInLeft">create</i>
+              <div id="side_tools" className="col s1 center">
+                <div className="animated bounceInLeft">
+                  <i id="add-memo-toggler" onClick={this.show_add_memo_modal} className="medium material-icons light-blue-text text-lighten-1">add</i>
+                  <br />
+                  <h6 className="white-text">New Memo</h6>
+                </div>
+                <br />
+                <div className="animated bounceInLeft">
+                  <i id="change_password" className="medium material-icons light-blue-text text-lighten-1">lock_outline</i>
+                  <br />
+                  <h6 className="white-text">Change Password</h6>
+                </div>
+                <br />
+                <div className="animated bounceInLeft">
+                  <i id="logout" className="medium material-icons light-blue-text text-lighten-1">exit_to_app</i>
+                  <br />
+                  <h6 className="white-text">Logout</h6>
                 </div>
               </div>
 
-              <div className="col s8">
-                {/* POSTS */}
-                <Posts />
-                {/* POSTS */}
+              <div id="central_section" className="col s12">
+                <div className="animated fadeIn">
+                  {/* POSTS */}
+                  <Posts />
+                  {/* POSTS */}
+                </div>  
               </div>
 
             </div>

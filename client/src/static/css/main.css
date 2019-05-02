@@ -24,6 +24,10 @@ html {
   text-transform: uppercase;
 }
 
+#prev {
+  display: none;
+}
+
 li {
   list-style: none;
 }

@@ -53,18 +53,24 @@ router.post('/all_memos', (request, response, next) => {
     where: {
       user_id: request.user.id,
     },
+    order: [
+      ['id', 'DESC'],
+    ],
     limit: 5,
     offset: request.body.offset
   }).then((posts) => {
+    for (i in posts) {
+      let local_date = posts[i].createdAt.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'});
+      posts[i].setDataValue('createdAt_local', local_date);
+
+      console.log(posts[i].createdAt_local);
+    }
+    console.log(posts);
     models.posts.count({
       where: {
         user_id: request.user.id,
       }
     }).then((count) => {
-      console.log(count);
-      for (i in posts) {
-        console.log(posts[i].id);
-      }
       return response.status(200).json({items: posts, count});
     })
   }).catch(error => console.log(error));

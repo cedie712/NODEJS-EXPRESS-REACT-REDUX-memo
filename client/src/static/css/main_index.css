@@ -57,6 +57,15 @@
   color: white;
 }
 
+#central_section{
+  padding-left: 150px;
+  padding-right: 150px;
+}
+
+#side_tools {
+  position: fixed;
+}
+
 #add-memo-toggler {
     cursor: pointer;
 }
@@ -96,6 +105,10 @@
   white-space: pre-wrap;
 }
 
+.warning, .sad, .done {
+  display: none;
+}
+
 @media (max-width: 700px) {
 
   #new-modal-form-holder {
@@ -124,5 +137,10 @@
   #new_memo_content {
     height: 420px;
   } 
+
+  #central_section{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 
 }

@@ -22,6 +22,19 @@ class Posts extends Component {
       if (this.state.offset >= (this.props.count - 5)) {
         document.getElementById('next').style.display = 'none';
       }
+      else {
+        document.getElementById('next').style.display = 'inline';
+      }
+
+      if (this.state.offset > 0) {
+        document.getElementById('prev').style.display = 'inline';
+      }
+
+      if (this.state.offset === 0) {
+        document.getElementById('prev').style.display = 'none';
+      }
+
+      window.scrollTo(0, 0);
     }
 
     
@@ -39,23 +52,35 @@ class Posts extends Component {
         });
     }
 
+    prev() {
+      this.setState({offset: this.state.offset - 5},
+        () => {
+          this.props.fetch_posts(this.state.offset);
+        });
+    }
+
     retrieve_posts () {
 
       let posts = this.props.posts.map((post) => {
+              console.log(post);
               let post_due_date = null;   
               if (post.post_due_date) {
-                  post_due_date = <h5 className="grey-text">Due Date: {post.post_due_date}</h5>;
+                  post_due_date = <h5 className="white-text">Due Date: {post.post_due_date}</h5>;
                 }
               
               return (<li key={post.id}>
-                  <h4 className="grey-text uppercase"><i className="material-icons">note</i>&nbsp;{post.post_title}</h4>
-                  <p className="white-text" id="post-body">{post.post_body}</p>
+                      <h5 className="grey-text uppercase"><i className="material-icons white-text">note</i>&nbsp;{post.post_title}&nbsp;
+                      <i className="material-icons light-green-text text-darken-2 right done">check</i>
+                      <i className="material-icons yellow-text text-darken-1 right warning">warning</i>
+                      <i className="material-icons red-text text-darken-1 right sad">sentiment_very_dissatisfied</i>
+                      </h5>
+                  <p className="grey-text" id="post-body">{post.post_body}</p>
+                  <h6 className="white-text">Created at: {post.createdAt_local}</h6>
                   {post_due_date}
                   <div className="right-align">
-                    <label>
-                      <input type="checkbox" />
-                      <span></span>
-                    </label>
+                    <span id={`edit_${post.id}`}><i className="material-icons white-text">edit</i></span>
+                    <span id={`mark_as_done_${post.id}`}><i className="material-icons white-text">check</i></span>
+                    <span id={`delete_${post.id}`}><i className="material-icons red-text text-darken-1">delete</i></span>
                   </div>
                  <br /><hr></hr><br />
               </li>)
@@ -73,6 +98,7 @@ class Posts extends Component {
             <div id="rendered-post">
               {this.retrieve_posts()}
             </div>
+            <button id="prev" className="btn waves-effect waves-light orange" onClick={this.prev.bind(this)}>Prev</button>
             <button id="next" className="btn waves-effect waves-light" onClick={this.next.bind(this)}>Next</button>
         </div>
         )
