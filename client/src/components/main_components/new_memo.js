@@ -37,19 +37,20 @@ class NewMemo extends Component {
       new_memo_content: this.state.new_memo_content,
       new_memo_title: this.state.new_memo_title,
       new_memo_due_date: due_date
-    }).then((response) => {
+    }).then(() => {
           this.close_new_memo_modal();
       }).catch((error) => console.log(error));
   }
 
   close_new_memo_modal() {
+    document.getElementById('new-memo-modal').style.backgroundColor = 'transparent';
     let new_memo_modal = document.getElementById('new-memo-modal');
     new_memo_modal.classList.add('animated');
     new_memo_modal.classList.add('bounceOutUp');
     setTimeout(() => {
       new_memo_modal.className = '';
       new_memo_modal.style.display = 'none';
-    
+      new_memo_modal.style.backgroundColor = 'rgba(0, 0, 0, 0.397)';
       clearTimeout();
     }, 1000);
     this.setState(

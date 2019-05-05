@@ -14,7 +14,6 @@ const models = require('../models');
 // });
 
 function login_required (request, response, next) {
-  console.log(request.isAuthenticated());
   if (request.isAuthenticated()) {
       return next();
   }
@@ -48,7 +47,6 @@ router.post('/save_new_memo', (request, response, next) => {
 
 // fetch memos
 router.post('/all_memos', (request, response, next) => {
-  console.log(request.body.offset);
   models.posts.findAll({
     where: {
       user_id: request.user.id,
@@ -60,12 +58,9 @@ router.post('/all_memos', (request, response, next) => {
     offset: request.body.offset
   }).then((posts) => {
     for (i in posts) {
-      let local_date = posts[i].createdAt.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'});
+      let local_date = posts[i].createdAt.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'});
       posts[i].setDataValue('createdAt_local', local_date);
-
-      console.log(posts[i].createdAt_local);
     }
-    console.log(posts);
     models.posts.count({
       where: {
         user_id: request.user.id,
@@ -76,6 +71,17 @@ router.post('/all_memos', (request, response, next) => {
   }).catch(error => console.log(error));
 });
 
-//
+// delete memo
+router.post('/delete_memo', (request, response, next) => {
+  let  memo_id = request.body.memo_id;
+  models.posts.destroy({
+    where: {
+      id: memo_id
+    }
+  }).then(() => {
+    return response.status(200).json({msg: 'memo deleted'})
+  }).catch((error) => console.log(error))
+
+});
 
 module.exports = router;

@@ -11,15 +11,18 @@
 
 
 #new-memo-modal {
-    display: none;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    justify-items: center;
+  display: none;
+  /* display: grid; */
+  background-color: rgba(0, 0, 0, 0.397);
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  justify-items: center;
+  align-items: center;
 }
 
 #new-modal-form-holder {
-    margin-top: 50px;
+    /* margin-top: 50px; */
     width: 800px;
     height: 550px;
     border-radius: 30px;
@@ -80,7 +83,7 @@
     resize: none;
 }
 
-#new-memo-close {
+#new-memo-close, #delete-memo-close {
   position: absolute;
   right: 10px;
   top: 10px;
@@ -109,7 +112,41 @@
   display: none;
 }
 
+
+.post-body-box {
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(65, 64, 64);
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+#delete-memo-container {
+  display: none;
+  /* display: grid; */
+  background-color: rgba(0, 0, 0, 0.397);
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  justify-items: center;
+  align-items: center;
+}
+
+#delete-memo-confirm-box {
+  background-color: rgb(175, 40, 40);
+  width: 400px;
+  height: 145px;
+  border-radius: 10px; 
+  padding: 10px;
+  padding-top: 45px;
+}
+
 @media (max-width: 700px) {
+  #side_tools {
+    display: none;
+  }
 
   #new-modal-form-holder {
     margin: 0;

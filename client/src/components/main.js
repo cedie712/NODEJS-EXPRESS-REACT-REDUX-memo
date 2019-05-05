@@ -6,6 +6,8 @@ import { fetch_posts } from '../actions/fetch_posts_action';
 //components
 import NewMemo from  './main_components/new_memo';
 import Posts from './main_components/posts';
+import DeleteMemo from './main_components/delete_memo';
+import { Redirect } from 'react-router-dom';
 
 //static
 import '../static/css/main_index.css';
@@ -19,6 +21,7 @@ class Main extends Component {
     }
     this.check_auth();
     this.show_add_memo_modal = this.show_add_memo_modal.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
 
@@ -35,6 +38,19 @@ class Main extends Component {
         })
   }
 
+
+  logout() {
+    axios.get('/api/user/signout')
+    .then((response) => {
+        this.setState({is_authenticated: false});
+        return window.location ='/';
+    })
+    .catch((error) => {
+        console.log(error);
+        // this.setState({is_authenticated: false})
+    })
+  }
+
   show_add_memo_modal(event) {
     event.preventDefault();
     let modal_container = document.getElementById("new-memo-modal");
@@ -47,6 +63,7 @@ class Main extends Component {
     if (this.state.is_authenticated) {
       document.getElementById('main-container').style.display = "block";
     }
+
     return (
       <div className="Main">
         <div id="main-container" className="grey darken-4">
@@ -55,19 +72,19 @@ class Main extends Component {
 
               <div id="side_tools" className="col s1 center">
                 <div className="animated bounceInLeft">
-                  <i id="add-memo-toggler" onClick={this.show_add_memo_modal} className="medium material-icons light-blue-text text-lighten-1">add</i>
+                  <i id="add-memo-toggler" onClick={this.show_add_memo_modal} className="medium material-icons light-blue-text text-lighten-1 pointer">add</i>
                   <br />
                   <h6 className="white-text">New Memo</h6>
                 </div>
                 <br />
                 <div className="animated bounceInLeft">
-                  <i id="change_password" className="medium material-icons light-blue-text text-lighten-1">lock_outline</i>
+                  <i id="change_password" className="medium material-icons light-blue-text text-lighten-1 pointer">vpn_key</i>
                   <br />
                   <h6 className="white-text">Change Password</h6>
                 </div>
                 <br />
                 <div className="animated bounceInLeft">
-                  <i id="logout" className="medium material-icons light-blue-text text-lighten-1">exit_to_app</i>
+                  <i id="logout" onClick={this.logout} className="medium material-icons light-blue-text text-lighten-1 pointer">exit_to_app</i>
                   <br />
                   <h6 className="white-text">Logout</h6>
                 </div>
@@ -87,6 +104,7 @@ class Main extends Component {
 
       {/* MODALS */}
         <NewMemo />
+        <DeleteMemo />
       {/* MODALS */}
 
       </div>

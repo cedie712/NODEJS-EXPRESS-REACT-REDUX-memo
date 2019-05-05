@@ -31,3 +31,11 @@ html {
 li {
   list-style: none;
 }
+
+.pointer {
+  cursor: pointer;
+}
+
+.pointer:hover {
+  color: rgb(80, 79, 79) !important;
+}
