@@ -4,21 +4,20 @@ h1, h2, h3, h4, h5, h6 {
 
 body {
   font-family: 'Courier New', Courier, monospace;
-
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-.datepicker {
+.datepicker_ {
   width: auto !important;
 }
 
-.dp-calendar-day {
-  width: 35px !important;
-  height: 30px !important;
-  }
+  .dp-calendar-day {
+    width: 35px !important;
+    height: 30px !important;
+    }
 
 .uppercase {
   text-transform: uppercase;
@@ -36,6 +35,16 @@ li {
   cursor: pointer;
 }
 
+input[type=date]::-webkit-inner-spin-button, 
+input[type=date]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
 .pointer:hover {
   color: rgb(80, 79, 79) !important;
+}
+
+textarea, div {
+  white-space: pre-wrap;
 }

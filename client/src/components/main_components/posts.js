@@ -6,6 +6,7 @@ import { set_delete } from '../../actions/set_delete_action';
 import { empty_state_props } from '../../actions/empty_state_prop';
 
 // css
+import M from 'materialize-css';
 // import 'materialize-css';
 
 class Posts extends Component {
@@ -17,6 +18,7 @@ class Posts extends Component {
   }
 
     componentDidMount() {
+        M.AutoInit();
         this.props.fetch_posts(this.state.offset);
     }
 
@@ -77,6 +79,22 @@ class Posts extends Component {
       modal_container.style.display = 'grid';
     }
 
+    edit_memo(memo) {
+      document.querySelectorAll('.edit-post-area').forEach((div) => {
+        div.style.display = 'none';
+      })
+      document.querySelectorAll('.post-body').forEach((div) => {
+        div.style.display = 'grid';
+      })
+      document.getElementById(`edit-post-area_${memo.id}`).style.display = 'grid';
+      document.getElementById(`post-body_${memo.id}`).style.display = 'none';
+
+      let textarea = document.getElementById(`edit-post-textarea_${memo.id}`);
+      textarea.value = memo.post_body;
+      textarea.focus();
+
+    }
+
     retrieve_posts () {
 
       let posts = this.props.posts.map((post) => {
@@ -91,13 +109,39 @@ class Posts extends Component {
                       <i className="material-icons yellow-text text-darken-1 right warning">warning</i>
                       <i className="material-icons red-text text-darken-1 right sad">sentiment_very_dissatisfied</i>
                       </h5>
+
                   <div className="post-body-box">
-                    <p className="grey-text" id="post-body">{post.post_body}</p>
+
+                    <p className="grey-text post-body" id={`post-body_${post.id}`}>{post.post_body}</p>
+
+                    {/* edit-post-text-area */}
+                    <div className="edit-post-area" id={`edit-post-area_${post.id}`}>
+           
+
+                      <textarea type='text' id={`edit-post-textarea_${post.id}`} className="edit-post-textarea"></textarea>
+                      <br />
+                      <div className="">
+  
+                          <div className="input-field">
+                            <i className="material-icons prefix white-text">date_range</i>
+                            <input type="date" id={`edit_memo_due_date_${post.id}`} className="datepicker_ date-picker-edit"></input>
+                            <label htmlFor={`edit_memo_due_date_${post.id}`}>Due Date(optional)</label>
+                          </div>
+                          <div className="center">
+                          <button type="" id={`save_edit_memo_${post.id}`} className="waves-effect waves-light light-green darken-2 btn  edit_save_memo">Save<i className="material-icons right">save</i>
+                            </button>
+                        </div>
+                      
+                      </div>
+
+                    </div>
+
                   </div>
+
                   <h6 className="white-text">Created at: {post.createdAt_local}</h6>
                   {post_due_date}
                   <div className="right-align">
-                    <span id={`edit_${post.id}`}><i className="material-icons white-text pointer">edit</i></span>
+                    <span id={`edit_${post.id}`} onClick={this.edit_memo.bind(this, post)}><i className="material-icons white-text pointer">edit</i></span>
                     <span id={`mark_as_done_${post.id}`}><i className="material-icons white-text pointer">check</i></span>
                     <span id={`delete_${post.id}`} onClick={this.show_delete_memo.bind(this, post)}><i className="material-icons red-text text-darken-1 pointer">delete</i></span>
                   </div>

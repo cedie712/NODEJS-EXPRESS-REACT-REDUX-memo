@@ -56,7 +56,7 @@
         color:  white;
 }
 
-#new_memo_due_date, #new_memo_title {
+#new_memo_due_date, #new_memo_title, #edit_memo_due_date {
   color: white;
 }
 
@@ -143,6 +143,36 @@
   padding-top: 45px;
 }
 
+.post-body {
+  /* display: none; */
+}
+
+.edit-post-area {
+  display: none;
+  /* display: grid; */
+  position: relative;
+  
+}
+
+.edit-post-textarea {
+ background-color: white;
+ resize: none;
+ height: 180px;
+ padding: 10px;
+}
+
+.date-picker-edit {
+  color: white;
+}
+
+.edit_save_memo {
+  /* margin-top: 0; */
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+
 @media (max-width: 700px) {
   #side_tools {
     display: none;
@@ -156,6 +186,7 @@
     border-radius: 0; 
   }
 
+
   #new-memo-close {
     position: absolute;
     right: 0;
@@ -166,10 +197,16 @@
     display: none;
   }
 
+  .edit_save_memo {
+    /* margin-top: 0; */
+    position: relative;
+    right: 0;
+  }
 
-#save-new-memo-mobile {
-  display: block;
-}
+
+  #save-new-memo-mobile {
+    display: block;
+  }
 
   #new_memo_content {
     height: 420px;

@@ -18,6 +18,7 @@ class NewMemo extends Component {
 
   componentDidMount() {
     M.AutoInit();
+
   }
 
  
@@ -70,12 +71,13 @@ class NewMemo extends Component {
         <div id="new-memo-modal" className=" ">
             <div id="new-modal-form-holder" className="animated bounceInDown light-green darken-2">
               <div className="">
-                <form>
+           
                   <h3 className="white-text">New Memo</h3>
 
                   <span id="save-new-memo-mobile"><i onClick={this.save_new_memo} className="material-icons grey-text text-darken-4 medium">save</i></span>
 
                   <span id="new-memo-close" onClick={this.close_new_memo_modal}><i className="material-icons white-text medium">close</i></span>
+                  
                   <div className="input-field">
                     <i className="material-icons prefix white-text">title</i>
                     <input id="new_memo_title" name="new_memo_title" onChange={this.fetch_field_data} value={this.state.new_memo_title} type="text" />
@@ -89,12 +91,13 @@ class NewMemo extends Component {
 
                   <div className="input-field">
                     <i className="material-icons prefix white-text">date_range</i>
-                    <input type="text" id="new_memo_due_date" className="datepicker"></input>
+                    <input type="date" id="new_memo_due_date" className="datepicker_"></input>
                     <label htmlFor="new_memo_due_date">Due Date(optional)</label>
                   </div>
 
                   <span id="save-new-memo"><i onClick={this.save_new_memo} className="material-icons grey-text text-darken-4 medium">save</i></span>
-                </form>
+
+           
               </div>
             </div>
         </div>

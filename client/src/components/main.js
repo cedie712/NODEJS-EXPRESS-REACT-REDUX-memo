@@ -7,7 +7,6 @@ import { fetch_posts } from '../actions/fetch_posts_action';
 import NewMemo from  './main_components/new_memo';
 import Posts from './main_components/posts';
 import DeleteMemo from './main_components/delete_memo';
-import { Redirect } from 'react-router-dom';
 
 //static
 import '../static/css/main_index.css';

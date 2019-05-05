@@ -8,6 +8,7 @@ class ConfirmSignUp extends Component {
     super();
     this.state = {
       verification_code: '',
+      user_authenticated: false
     }
 
     this.fetch_code_value = this.fetch_code_value.bind(this);
@@ -34,18 +35,18 @@ class ConfirmSignUp extends Component {
     })
     .then((response) => {
       if (response.status === 200) {
-        return this.props.update_user_auth(true);
+        this.setState({user_authenticated: true});
       }
     }).catch((error) => {
 
-    console.log(error);
-      console.log(error.response.data.error);
+    // console.log(error);
+      // console.log(error.response.data.error);
       return M.toast({html: error.response.data.error, classes: 'rounded red darken-2'})
     })
   }
 
   render() {
-    if (this.props.user_authenticated) {
+    if (this.state.user_authenticated) {
       return <Redirect to="/main" />
     }
     
