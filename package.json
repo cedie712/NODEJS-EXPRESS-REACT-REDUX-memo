@@ -8,6 +8,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bcrypt-nodejs": "0.0.3",
+    "concurrently": "^4.1.0",
     "connect-pg-simple": "^5.0.0",
     "cookie-parser": "~1.4.3",
     "csurf": "^1.9.0",

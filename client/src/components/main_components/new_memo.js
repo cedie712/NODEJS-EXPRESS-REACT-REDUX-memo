@@ -32,7 +32,7 @@ class NewMemo extends Component {
     let due_date = document.getElementById('new_memo_due_date').value;
     console.log(due_date);
     if (this.state.new_memo_title === '' || this.state.new_memo_content === '') {
-      return M.toast({html: 'complete the fucking required fields', classes: 'rounded red darken-2'})
+      return M.toast({html: 'complete the fucking required fields', classes: 'rounded red darken-2'});
     }
     this.props.create_post({
       new_memo_content: this.state.new_memo_content,

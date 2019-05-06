@@ -79,20 +79,55 @@ class Posts extends Component {
       modal_container.style.display = 'grid';
     }
 
-    edit_memo(memo) {
+
+    edit_memo_show(memo) {
+      document.querySelectorAll('.edit-memo-title').forEach((div) => {
+        div.style.display = 'none';
+      });
       document.querySelectorAll('.edit-post-area').forEach((div) => {
         div.style.display = 'none';
-      })
+      });
+      document.querySelectorAll('.memo-title').forEach((div) => {
+        div.style.display = 'block';
+      });
       document.querySelectorAll('.post-body').forEach((div) => {
         div.style.display = 'grid';
-      })
+      });
+      document.getElementById(`edit_memo_title_${memo.id}`).style.display = 'block';
+      document.getElementById(`memo-title_${memo.id}`).style.display = 'none';
       document.getElementById(`edit-post-area_${memo.id}`).style.display = 'grid';
       document.getElementById(`post-body_${memo.id}`).style.display = 'none';
 
       let textarea = document.getElementById(`edit-post-textarea_${memo.id}`);
       textarea.value = memo.post_body;
+      let title_input = document.getElementById(`edit_memo_title_input_${memo.id}`);
+      title_input.value = memo.post_title;
       textarea.focus();
+    }
 
+    save_edit_memo(memo_id) {
+      let new_memo_body = document.getElementById(`edit-post-textarea_${memo_id}`).value;
+      let new_memo_title = document.getElementById(`edit_memo_title_input_${memo_id}`).value;
+      let new_memo_due_date = document.getElementById(`edit_memo_due_date_${memo_id}`).value;
+
+
+      if (new_memo_title === '' || new_memo_body === '') {
+        return M.toast({html: 'complete the fucking required fields', classes: 'rounded red darken-2'});
+      }
+
+      let new_memo = {
+        title: new_memo_title,
+        body: new_memo_body,
+        due_date: new_memo_due_date,
+      }
+
+    }
+
+    close_edit_view(memo_id) {
+      document.getElementById(`edit-post-area_${memo_id}`).style.display = 'none';
+      document.getElementById(`post-body_${memo_id}`).style.display = 'grid';
+      document.getElementById(`edit_memo_title_${memo_id}`).style.display = 'none';
+      document.getElementById(`memo-title_${memo_id}`).style.display = 'block';
     }
 
     retrieve_posts () {
@@ -104,19 +139,28 @@ class Posts extends Component {
                 }
               
               return (<li key={post.id}>
-                      <h5 className="grey-text uppercase"><i className="material-icons white-text">note</i>&nbsp;{post.post_title}&nbsp;
+
+                      <h5 className="grey-text uppercase memo-title" id={`memo-title_${post.id}`}><i className="material-icons white-text">note</i>&nbsp;{post.post_title}&nbsp;
                       <i className="material-icons light-green-text text-darken-2 right done">check</i>
                       <i className="material-icons yellow-text text-darken-1 right warning">warning</i>
                       <i className="material-icons red-text text-darken-1 right sad">sentiment_very_dissatisfied</i>
                       </h5>
 
-                  <div className="post-body-box">
+                          <div className="input-field edit-memo-title" id={`edit_memo_title_${post.id}`}>
+                            <i className="material-icons prefix white-text">title</i>
+                            <input type="text" className="edit_memo_title_input" id={`edit_memo_title_input_${post.id}`}></input>
+                          </div>
 
+
+                  <div className="post-body-box">
                     <p className="grey-text post-body" id={`post-body_${post.id}`}>{post.post_body}</p>
 
                     {/* edit-post-text-area */}
                     <div className="edit-post-area" id={`edit-post-area_${post.id}`}>
            
+                      <div className="right-align">
+                        <span className="edit-memo-close" onClick={this.close_edit_view.bind(this, post.id)}><i className="material-icons white-text pointer">close</i></span>
+                      </div>
 
                       <textarea type='text' id={`edit-post-textarea_${post.id}`} className="edit-post-textarea"></textarea>
                       <br />
@@ -127,8 +171,8 @@ class Posts extends Component {
                             <input type="date" id={`edit_memo_due_date_${post.id}`} className="datepicker_ date-picker-edit"></input>
                             <label htmlFor={`edit_memo_due_date_${post.id}`}>Due Date(optional)</label>
                           </div>
-                          <div className="center">
-                          <button type="" id={`save_edit_memo_${post.id}`} className="waves-effect waves-light light-green darken-2 btn  edit_save_memo">Save<i className="material-icons right">save</i>
+                          <div className="center-align">
+                          <button type="" id={`save_edit_memo_${post.id}`} onClick={this.save_edit_memo.bind(this, post.id)} className="waves-effect waves-light light-green darken-2 btn  edit_save_memo">Save<i className="material-icons right">save</i>
                             </button>
                         </div>
                       
@@ -141,7 +185,7 @@ class Posts extends Component {
                   <h6 className="white-text">Created at: {post.createdAt_local}</h6>
                   {post_due_date}
                   <div className="right-align">
-                    <span id={`edit_${post.id}`} onClick={this.edit_memo.bind(this, post)}><i className="material-icons white-text pointer">edit</i></span>
+                    <span id={`edit_${post.id}`} onClick={this.edit_memo_show.bind(this, post)}><i className="material-icons white-text pointer">edit</i></span>
                     <span id={`mark_as_done_${post.id}`}><i className="material-icons white-text pointer">check</i></span>
                     <span id={`delete_${post.id}`} onClick={this.show_delete_memo.bind(this, post)}><i className="material-icons red-text text-darken-1 pointer">delete</i></span>
                   </div>

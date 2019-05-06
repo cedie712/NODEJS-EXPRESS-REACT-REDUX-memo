@@ -172,6 +172,18 @@
   right: 0;
 }
 
+.edit-memo-title {
+  display: none;
+}
+
+.edit_memo_title_input {
+  color: white;
+}
+
+.memo-title {
+  /* display: none; */
+}
+
 
 @media (max-width: 700px) {
   #side_tools {
@@ -202,7 +214,6 @@
     position: relative;
     right: 0;
   }
-
 
   #save-new-memo-mobile {
     display: block;

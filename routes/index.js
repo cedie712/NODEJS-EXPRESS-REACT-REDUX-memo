@@ -84,4 +84,9 @@ router.post('/delete_memo', (request, response, next) => {
 
 });
 
+// edit memo
+router.post('/edit_memo', (request, response, next) => {
+  console.log(request.body);
+});
+
 module.exports = router;

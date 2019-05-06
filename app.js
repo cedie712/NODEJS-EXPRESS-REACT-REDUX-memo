@@ -67,5 +67,6 @@ app.use('/api', indexRouter);
 //   res.render('error');
 // });
 
-
+// concurrently script
+// "start": "concurrently \"nodemon ./bin/www\" \"cd client && npm start\""
 module.exports = app;
