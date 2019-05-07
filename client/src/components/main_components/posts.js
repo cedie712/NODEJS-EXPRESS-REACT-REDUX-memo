@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux';
+
+// redux actions
 import { fetch_posts } from '../../actions/fetch_posts_action';
 import { set_delete } from '../../actions/set_delete_action';
+import { update_post } from  '../../actions/update_post_action';
 import { empty_state_props } from '../../actions/empty_state_prop';
 
 // css
@@ -45,6 +48,7 @@ class Posts extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.post) {
           nextProps.post['createdAt_local'] = 'Just right fucking now';
+          nextProps.post['post_due_date_local'] = new Date(nextProps.post.post_due_date).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'});
           this.props.posts.unshift(nextProps.post);
           this.props.empty_state_props();
         }
@@ -102,24 +106,53 @@ class Posts extends Component {
       textarea.value = memo.post_body;
       let title_input = document.getElementById(`edit_memo_title_input_${memo.id}`);
       title_input.value = memo.post_title;
+      if (memo.post_due_date) {
+        let date_input = document.getElementById(`edit_memo_due_date_${memo.id}`);
+        let year = new Date(memo.post_due_date).toLocaleDateString('en-US', {year: 'numeric'});
+        let month = new Date(memo.post_due_date).toLocaleDateString('en-US', {month: '2-digit'});
+        let day = new Date(memo.post_due_date).toLocaleDateString('en-US', {day: '2-digit'});
+        date_input.value = `${year}-${month}-${day}`;
+      }
       textarea.focus();
     }
 
     save_edit_memo(memo_id) {
       let new_memo_body = document.getElementById(`edit-post-textarea_${memo_id}`).value;
       let new_memo_title = document.getElementById(`edit_memo_title_input_${memo_id}`).value;
-      let new_memo_due_date = document.getElementById(`edit_memo_due_date_${memo_id}`).value;
+      let new_memo_due_date = null;
+      if (document.getElementById(`edit_memo_due_date_${memo_id}`).value) {
+        new_memo_due_date = document.getElementById(`edit_memo_due_date_${memo_id}`).value;
+        if (new Date() > new Date(new_memo_due_date)) {
+          return M.toast({html: 'Invalid due date. You cannot choose a past date', classes: 'rounded red darken-2'});
+        }
+      }
 
 
       if (new_memo_title === '' || new_memo_body === '') {
         return M.toast({html: 'complete the fucking required fields', classes: 'rounded red darken-2'});
       }
 
-      let new_memo = {
+      let updated_memo = {
         title: new_memo_title,
         body: new_memo_body,
         due_date: new_memo_due_date,
+        memo_id: memo_id,
       }
+
+      this.props.update_post(updated_memo).then((response) => {
+        this.close_edit_view(memo_id);
+        document.getElementById(`memo-title_${memo_id}`).innerHTML = new_memo_title;
+        document.getElementById(`post-body_${memo_id}`).innerHTML = new_memo_body;
+      
+        if (new_memo_due_date) {
+          document.getElementById(`post_due_date_${memo_id}`).innerHTML = 'Due Date: ' + new Date(new_memo_due_date).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'});
+          document.getElementById(`post_due_date_${memo_id}`).style.display = 'block';
+        }
+        else {
+          document.getElementById(`post_due_date_${memo_id}`).style.display = 'none';
+        }
+
+        }).catch((error) => console.log(error));
 
     }
 
@@ -135,7 +168,10 @@ class Posts extends Component {
       let posts = this.props.posts.map((post) => {
               let post_due_date = null;   
               if (post.post_due_date) {
-                  post_due_date = <h5 className="white-text">Due Date: {post.post_due_date}</h5>;
+                  post_due_date = <h5 id={`post_due_date_${post.id}`} className="white-text">Due Date: {post.post_due_date_local}</h5>;
+                }
+                else {
+                  post_due_date = <h5 id={`post_due_date_${post.id}`} className="white-text due-date-catcher">null</h5>;
                 }
               
               return (<li key={post.id}>
@@ -222,4 +258,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-  export default withRouter(connect(mapStateToProps, {fetch_posts, set_delete, empty_state_props})(Posts));
+  export default withRouter(connect(mapStateToProps, {fetch_posts, set_delete, update_post, empty_state_props})(Posts));

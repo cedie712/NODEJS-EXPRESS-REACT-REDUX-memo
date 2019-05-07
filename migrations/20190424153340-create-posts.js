@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       post_due_date: {
-        type: Sequelize.STRING
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,

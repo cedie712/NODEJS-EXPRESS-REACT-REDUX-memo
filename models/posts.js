@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     user_id: DataTypes.INTEGER,
     post_title: DataTypes.STRING,
     post_body: DataTypes.STRING,
-    post_due_date: DataTypes.STRING
+    post_due_date: DataTypes.DATE
   }, {});
   posts.associate = function(models) {
     // associations can be defined here

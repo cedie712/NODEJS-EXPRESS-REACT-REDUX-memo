@@ -184,6 +184,10 @@
   /* display: none; */
 }
 
+.due-date-catcher {
+  display: none;
+}
+
 
 @media (max-width: 700px) {
   #side_tools {

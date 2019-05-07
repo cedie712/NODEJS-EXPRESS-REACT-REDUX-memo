@@ -1,4 +1,4 @@
-import { FETCH_POSTS, CREATE_POST, SET_POST_TO_DELETE, DELETE_POST, EMPTY_STATE_PROPS } from '../actions/types';
+import { FETCH_POSTS, CREATE_POST, SET_POST_TO_DELETE, DELETE_POST, EMPTY_STATE_PROPS, UPDATE_POST } from '../actions/types';
 
 const initialState = {
     items: [],
@@ -21,7 +21,12 @@ export default function(state=initialState, action) {
             return {
                 ...state,
                 item: action.payload
-            }    
+            }   
+        case UPDATE_POST: 
+            return {
+                ...state,
+                // item: action.payload
+            }   
         case SET_POST_TO_DELETE:
             return {
                 ...state,

@@ -30,16 +30,24 @@ class NewMemo extends Component {
 
   save_new_memo() {
     let due_date = document.getElementById('new_memo_due_date').value;
-    console.log(due_date);
+
+    if (due_date) {
+      if (new Date() > new Date(due_date)) {
+        return M.toast({html: 'Invalid due date. You cannot choose a past date', classes: 'rounded red darken-2'});
+      }
+    }
+
+
     if (this.state.new_memo_title === '' || this.state.new_memo_content === '') {
       return M.toast({html: 'complete the fucking required fields', classes: 'rounded red darken-2'});
     }
     this.props.create_post({
       new_memo_content: this.state.new_memo_content,
       new_memo_title: this.state.new_memo_title,
-      new_memo_due_date: due_date
+      new_memo_due_date: due_date,
     }).then(() => {
           this.close_new_memo_modal();
+          window.scrollTo(0, 0);
       }).catch((error) => console.log(error));
   }
 
