@@ -91,6 +91,20 @@ router.post('/delete_memo', (request, response, next) => {
 
 });
 
+// done memo
+router.post('/done_memo', (request, response, next) => {
+  let memo_id = request.body.memo_id;
+  models.posts.update({
+    is_done: true
+  }, {
+    where: {
+      id: memo_id
+    }
+  }).then(() => {
+    return response.status(200).json({msg: 'memo set to done'})
+  }).catch(error => console.log(error));
+});
+
 // edit memo
 router.post('/edit_memo', (request, response, next) => {
   console.log(request.body);

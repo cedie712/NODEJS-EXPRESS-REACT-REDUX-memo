@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 // redux actions
 import { fetch_posts } from '../../actions/fetch_posts_action';
 import { set_delete } from '../../actions/set_delete_action';
+import { set_done } from '../../actions/set_done_action';
 import { update_post } from  '../../actions/update_post_action';
 import { empty_state_props } from '../../actions/empty_state_prop';
 
@@ -58,6 +59,13 @@ class Posts extends Component {
           
           this.props.posts.splice(post_index, 1);
         }
+
+        if (nextProps.post_done) {
+          let post_id = this.props.memo_to_done.id;
+          document.getElementById(`check_${post_id}`).classList.remove('hide');
+          document.getElementById(`mark_as_done_${post_id}`).style.display = 'none';
+          document.getElementById(`edit_${post_id}`).style.display = 'none';
+        }
     }
 
     next() {
@@ -80,6 +88,12 @@ class Posts extends Component {
     show_delete_memo(memo) {
       this.props.set_delete(memo);
       let modal_container = document.getElementById("delete-memo-container");
+      modal_container.style.display = 'grid';
+    }
+
+    show_done_memo(memo) {
+      this.props.set_done(memo);
+      let modal_container = document.getElementById("done-memo-container");
       modal_container.style.display = 'grid';
     }
 
@@ -173,11 +187,19 @@ class Posts extends Component {
                 else {
                   post_due_date = <h5 id={`post_due_date_${post.id}`} className="white-text due-date-catcher">null</h5>;
                 }
+              let edit_memo = null;
+              let done_memo = null;
+              let check = '';
+              if (!post.is_done) {
+                check = 'hide'
+                edit_memo = <span id={`edit_${post.id}`} onClick={this.edit_memo_show.bind(this, post)}><i className="material-icons white-text pointer post-tool-icons">edit</i></span>
+                done_memo = <span id={`mark_as_done_${post.id}`} onClick={this.show_done_memo.bind(this, post)}><i className="material-icons white-text pointer post-tool-icons">check</i></span>
+              }
               
               return (<li key={post.id}>
 
                       <h5 className="grey-text uppercase memo-title" id={`memo-title_${post.id}`}><i className="material-icons white-text">note</i>&nbsp;{post.post_title}&nbsp;
-                      <i className="material-icons light-green-text text-darken-2 right done">check</i>
+                      <i className={`material-icons light-green-text text-darken-2 right done ${check}`} id={`check_${post.id}`}>check</i>
                       <i className="material-icons yellow-text text-darken-1 right warning">warning</i>
                       <i className="material-icons red-text text-darken-1 right sad">sentiment_very_dissatisfied</i>
                       </h5>
@@ -221,9 +243,9 @@ class Posts extends Component {
                   <h6 className="white-text">Created at: {post.createdAt_local}</h6>
                   {post_due_date}
                   <div className="right-align">
-                    <span id={`edit_${post.id}`} onClick={this.edit_memo_show.bind(this, post)}><i className="material-icons white-text pointer">edit</i></span>
-                    <span id={`mark_as_done_${post.id}`}><i className="material-icons white-text pointer">check</i></span>
-                    <span id={`delete_${post.id}`} onClick={this.show_delete_memo.bind(this, post)}><i className="material-icons red-text text-darken-1 pointer">delete</i></span>
+                    {edit_memo}
+                    {done_memo}
+                    <span id={`delete_${post.id}`} onClick={this.show_delete_memo.bind(this, post)}><i className="material-icons red-text text-darken-1 pointer post-tool-icons">delete</i></span>
                   </div>
                  <br /><hr></hr><br />
               </li>)
@@ -241,8 +263,10 @@ class Posts extends Component {
             <div id="rendered-post">
               {this.retrieve_posts()}
             </div>
-            <button id="prev" className="btn waves-effect waves-light orange" onClick={this.prev.bind(this)}>Prev</button>
-            <button id="next" className="btn waves-effect waves-light" onClick={this.next.bind(this)}>Next</button>
+            <div className="right-align">
+              <button id="prev" className="btn waves-effect waves-light orange" onClick={this.prev.bind(this)}>Prev</button>
+              <button id="next" className="btn waves-effect waves-light" onClick={this.next.bind(this)}>Next</button>
+            </div>
         </div>
         )
     }
@@ -254,8 +278,10 @@ const mapStateToProps = (state) => {
     post: state.posts.item,
     count: state.posts.count,
     memo_to_delete: state.posts.post_to_delete,
-    post_splice: state.posts.post_splice
+    post_splice: state.posts.post_splice,
+    post_done: state.posts.post_done,
+    memo_to_done: state.posts.post_to_done
   }
 }
 
-  export default withRouter(connect(mapStateToProps, {fetch_posts, set_delete, update_post, empty_state_props})(Posts));
+  export default withRouter(connect(mapStateToProps, {fetch_posts, set_delete, set_done, update_post, empty_state_props})(Posts));

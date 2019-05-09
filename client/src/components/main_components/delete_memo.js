@@ -42,7 +42,7 @@ class DeleteMemo extends Component {
                     <h6 className="white-text">Are you sure about deleting this memo?
                     This action is irreversible</h6><br />
                     <span><i className="material-icons grey-text text-darken-4 animated wobble infinite pointer"
-                    onClick={this.delete_this_fucking_memo}>delete</i></span>
+                    onClick={this.delete_this_fucking_memo}>delete</i></span><i className="material-icons yellow-text">warning</i>
                 </div>    
             </div>
         </div>

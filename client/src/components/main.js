@@ -7,6 +7,7 @@ import { fetch_posts } from '../actions/fetch_posts_action';
 import NewMemo from  './main_components/new_memo';
 import Posts from './main_components/posts';
 import DeleteMemo from './main_components/delete_memo';
+import DoneMemo from './main_components/done_memo';
 
 //static
 import '../static/css/main_index.css';
@@ -104,6 +105,7 @@ class Main extends Component {
       {/* MODALS */}
         <NewMemo />
         <DeleteMemo />
+        <DoneMemo />
       {/* MODALS */}
 
       </div>
