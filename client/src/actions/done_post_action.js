@@ -2,7 +2,7 @@ import { DONE_POST } from './types';
 import axios from 'axios';
 
 export const done_memo = (memo) => dispatch => {
-    return axios.post('http://localhost:8000/api/done_memo', {
+    return axios.post('/api/done_memo', {
       memo_id: memo.id
     })
     .then((response) => {

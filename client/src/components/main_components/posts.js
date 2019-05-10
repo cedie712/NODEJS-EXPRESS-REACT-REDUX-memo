@@ -277,7 +277,7 @@ class Posts extends Component {
                  <br /><hr></hr><br />
               </li>)
       }); 
-      return posts
+      return posts;
     }
     
 

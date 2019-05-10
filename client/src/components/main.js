@@ -8,6 +8,7 @@ import NewMemo from  './main_components/new_memo';
 import Posts from './main_components/posts';
 import DeleteMemo from './main_components/delete_memo';
 import DoneMemo from './main_components/done_memo';
+import ChangePassword from './main_components/change_password';
 
 //static
 import '../static/css/main_index.css';
@@ -18,10 +19,12 @@ class Main extends Component {
   constructor() {
     super();
     this.state = {
-      is_authenticated: false
+      is_authenticated: false,
+      google_authenticated: false,
     }
     this.check_auth();
     this.show_add_memo_modal = this.show_add_memo_modal.bind(this);
+    this.show_change_password_modal = this.show_change_password_modal.bind(this);
     this.logout = this.logout.bind(this);
   }
 
@@ -33,6 +36,9 @@ class Main extends Component {
       axios.get('/api/main')
         .then((response) => {
             this.setState({is_authenticated: true})
+            if (response.data.google_authenticated) {
+              this.setState({google_authenticated: true})
+            }
         })
         .catch((error) => {
             console.log(error);
@@ -62,16 +68,37 @@ class Main extends Component {
     modal_container.style.display = 'grid';
   }
 
-  open_nav() {
+  show_change_password_modal() {
+    let modal_container = document.getElementById("change-password-container");
 
-
+    modal_container.style.display = 'grid';
   }
 
+
   render() {
-    
+    let has_no_post = null;
     if (this.state.is_authenticated) {
       document.getElementById('main-container').style.display = "block";
+      if (this.props.posts.length === 0) {
+        has_no_post = <h3 className="white-text">Currently, You have no memo. Start creating a new one!</h3>;
+        let class_val = " animated heartBeat infinite";
+        document.getElementById('add-memo-toggler').className += class_val;
+        document.getElementById('mob-add').className += class_val;
+      }
+      else {
+        let class_val = "medium material-icons light-blue-text text-lighten-1 pointer";
+        document.getElementById('add-memo-toggler').className = class_val
+        document.getElementById('mob-add').className += class_val;
+      }
     }
+
+    if (this.state.google_authenticated) {
+      document.getElementById('change-pass-tool').style.display = 'none';
+      document.getElementById('mob-key').style.display = 'none';
+    }
+
+ 
+   
 
     return (
       <div className="Main">
@@ -81,8 +108,8 @@ class Main extends Component {
           <div id="mob-nav">
           <h4 id="mob-brand" className="brand-logo left">Memo</h4>
             <ul>
-              <li><i className="material-icons mob-nav-icons light-blue-text text-lighten-1" onClick={this.show_add_memo_modal}>add</i></li>
-              <li><i className="material-icons mob-nav-icons light-blue-text text-lighten-1">vpn_key</i></li>
+              <li><i id="mob-add" className="material-icons mob-nav-icons light-blue-text text-lighten-1" onClick={this.show_add_memo_modal}>add</i></li>
+              <li><i id="mob-key" className="material-icons mob-nav-icons light-blue-text text-lighten-1" onClick={this.show_change_password_modal}>vpn_key</i></li>
               <li><i className="material-icons mob-nav-icons light-blue-text text-lighten-1" onClick={this.logout}>exit_to_app</i></li>
             </ul>
           </div>  
@@ -96,14 +123,16 @@ class Main extends Component {
                   <i id="add-memo-toggler" onClick={this.show_add_memo_modal} className="medium material-icons light-blue-text text-lighten-1 pointer">add</i>
                   <br />
                   <h6 className="white-text">New Memo</h6>
+                  <br />
                 </div>
-                <br />
-                <div className="animated bounceInLeft">
-                  <i id="change_password" className="medium material-icons light-blue-text text-lighten-1 pointer">vpn_key</i>
+                
+                <div className="animated bounceInLeft" id="change-pass-tool">
+                  <i id="change_password" className="medium material-icons light-blue-text text-lighten-1 pointer" onClick={this.show_change_password_modal}>vpn_key</i>
                   <br />
                   <h6 className="white-text">Change Password</h6>
+                  <br />
                 </div>
-                <br />
+
                 <div className="animated bounceInLeft">
                   <i id="logout" onClick={this.logout} className="medium material-icons light-blue-text text-lighten-1 pointer">exit_to_app</i>
                   <br />
@@ -115,6 +144,7 @@ class Main extends Component {
                 <div className="animated fadeIn">
                   {/* POSTS */}
                   <Posts />
+                  {has_no_post}
                   {/* POSTS */}
                 </div>  
               </div>
@@ -127,6 +157,7 @@ class Main extends Component {
         <NewMemo />
         <DeleteMemo />
         <DoneMemo />
+        <ChangePassword />
       {/* MODALS */}
 
       </div>

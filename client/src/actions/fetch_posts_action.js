@@ -2,7 +2,7 @@ import { FETCH_POSTS } from './types';
 import axios from 'axios';
 
 export const fetch_posts = (offset) => dispatch => {
-    axios.post('http://localhost:8000/api/all_memos', {
+    axios.post('/api/all_memos', {
       offset: offset
     })
     .then((response) => {

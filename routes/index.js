@@ -25,8 +25,19 @@ router.use(login_required);
 
 router.get('/main', (request, response, next) => {
   console.log(request.user.id);
-  context = {msg: 'user authenticated'};
-  return response.json(context);
+  models.users.findOne({
+    where: {
+      id: request.user.id
+    }
+  }).then((user) => {
+    context = {msg: 'user authenticated'};
+    if (user.google_id) {
+      context['google_authenticated'] = true;
+    }
+    return response.json(context);
+  }).catch(error => console.log(error));
+
+  
 });
 
 // save new memo
@@ -55,6 +66,8 @@ router.post('/all_memos', (request, response, next) => {
       user_id: request.user.id,
     },
     order: [
+      ['is_done', 'DESC'],
+      ['post_due_date', 'ASC'],
       ['id', 'DESC'],
     ],
     limit: 5,
