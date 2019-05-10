@@ -63,8 +63,12 @@ class Posts extends Component {
         if (nextProps.post_done) {
           let post_id = this.props.memo_to_done.id;
           document.getElementById(`check_${post_id}`).classList.remove('hide');
+          document.getElementById(`warning_${post_id}`).classList.add('hide');
           document.getElementById(`mark_as_done_${post_id}`).style.display = 'none';
           document.getElementById(`edit_${post_id}`).style.display = 'none';
+          if (this.props.memo_to_done.post_due_date) {
+            document.getElementById(`due_date_local_${this.props.memo_to_done.id}`).className = 'white-text';
+          }
         }
     }
 
@@ -137,7 +141,7 @@ class Posts extends Component {
       if (document.getElementById(`edit_memo_due_date_${memo_id}`).value) {
         new_memo_due_date = document.getElementById(`edit_memo_due_date_${memo_id}`).value;
         if (new Date() > new Date(new_memo_due_date)) {
-          return M.toast({html: 'Invalid due date. You cannot choose a past date', classes: 'rounded red darken-2'});
+          return M.toast({html: 'Invalid due date. You cannot choose a past date or a current date', classes: 'rounded red darken-2'});
         }
       }
 
@@ -180,31 +184,54 @@ class Posts extends Component {
     retrieve_posts () {
 
       let posts = this.props.posts.map((post) => {
-              let post_due_date = null;   
-              if (post.post_due_date) {
-                  post_due_date = <h5 id={`post_due_date_${post.id}`} className="white-text">Due Date: {post.post_due_date_local}</h5>;
-                }
-                else {
-                  post_due_date = <h5 id={`post_due_date_${post.id}`} className="white-text due-date-catcher">null</h5>;
-                }
+              let post_due_date = null;
               let edit_memo = null;
               let done_memo = null;
+              let warning = 'hide';
+              let sad = 'hide';
+              let due_date_color = 'white-text'
               let check = '';
+
               if (!post.is_done) {
                 check = 'hide'
                 edit_memo = <span id={`edit_${post.id}`} onClick={this.edit_memo_show.bind(this, post)}><i className="material-icons white-text pointer post-tool-icons">edit</i></span>
                 done_memo = <span id={`mark_as_done_${post.id}`} onClick={this.show_done_memo.bind(this, post)}><i className="material-icons white-text pointer post-tool-icons">check</i></span>
               }
+              if (post.post_due_date) {
+                let date_diff = new Date(post.post_due_date) - new Date();
+                let due_check = date_diff < 432000000;
+                if (due_check && !post.is_done) {
+                  warning = '';
+                  due_date_color = 'yellow-text';
+                }
+                if ((date_diff < 0) && !post.is_done) {
+                    sad = '';
+                    warning = 'hide';
+                    due_date_color = 'red-text';
+                }
+                
+              }
+
+                 
+              if (post.post_due_date) {
+                post_due_date = <h5 id={`post_due_date_${post.id}`} className="white-text">Due Date: <span className={due_date_color} id={`due_date_local_${post.id}`}>{post.post_due_date_local}</span></h5>;
+              }
+              else {
+                post_due_date = <h5 id={`post_due_date_${post.id}`} className="white-text due-date-catcher">null</h5>;
+              }
               
               return (<li key={post.id}>
+                      <div className="title-span">
+                        <h5 className="grey-text uppercase memo-title" id={`memo-title_${post.id}`}><i className="material-icons white-text">note</i><span className="title-span">&nbsp;{post.post_title}</span>
+                        <span className="notifier-span">
+                          <i className={`material-icons light-green-text text-darken-2 right done ${check}`} id={`check_${post.id}`}>check</i>
+                          <i className={`material-icons yellow-text text-darken-1 right warning ${warning}`} id={`warning_${post.id}`}>warning</i>
+                          <i className={`material-icons red-text text-darken-1 right sad ${sad}`}>sentiment_very_dissatisfied</i>
+                        </span>
+                        </h5>
+                      </div>
 
-                      <h5 className="grey-text uppercase memo-title" id={`memo-title_${post.id}`}><i className="material-icons white-text">note</i>&nbsp;{post.post_title}&nbsp;
-                      <i className={`material-icons light-green-text text-darken-2 right done ${check}`} id={`check_${post.id}`}>check</i>
-                      <i className="material-icons yellow-text text-darken-1 right warning">warning</i>
-                      <i className="material-icons red-text text-darken-1 right sad">sentiment_very_dissatisfied</i>
-                      </h5>
-
-                          <div className="input-field edit-memo-title" id={`edit_memo_title_${post.id}`}>
+                          <div className="input-field edit-memo-title" maxLength="25" id={`edit_memo_title_${post.id}`}>
                             <i className="material-icons prefix white-text">title</i>
                             <input type="text" className="edit_memo_title_input" id={`edit_memo_title_input_${post.id}`}></input>
                           </div>

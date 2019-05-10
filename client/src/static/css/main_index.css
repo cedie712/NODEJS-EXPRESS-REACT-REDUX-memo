@@ -112,14 +112,18 @@
   white-space: pre-wrap;
 }
 
-.warning, .sad {
-  display: none;
+.title-span {
+  overflow-wrap: break-word
+}
+/* .title-span {
+  margin-right: 10px;
 }
 
-/* .done {
-  display: grid;
+.notifier-span {
+  position: relative;
+  top: 0;
+  right: 0;
 } */
-
 
 .post-body-box {
   border-width: 1px;
@@ -206,10 +210,37 @@
   display: none;
 }
 
+nav {
+  display: none;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+#mob-nav {
+  display: grid;
+  justify-items: end;
+}
+
+.mob-nav-icons {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#mob-brand {
+  margin-top: 15px;
+  margin-left: 10px; 
+}
+
 
 @media (max-width: 700px) {
   #side_tools {
     display: none;
+  }
+
+  nav {
+    display: grid;
   }
 
   #new-modal-form-holder {

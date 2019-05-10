@@ -11,6 +11,7 @@ import DoneMemo from './main_components/done_memo';
 
 //static
 import '../static/css/main_index.css';
+import M from 'materialize-css';
 
 
 class Main extends Component {
@@ -24,6 +25,9 @@ class Main extends Component {
     this.logout = this.logout.bind(this);
   }
 
+  componentDidMount() {
+    M.AutoInit();
+  }
 
   check_auth() {
       axios.get('/api/main')
@@ -58,6 +62,11 @@ class Main extends Component {
     modal_container.style.display = 'grid';
   }
 
+  open_nav() {
+
+
+  }
+
   render() {
     
     if (this.state.is_authenticated) {
@@ -67,6 +76,18 @@ class Main extends Component {
     return (
       <div className="Main">
         <div id="main-container" className="grey darken-4">
+
+        <nav className="animated slideInLeft">
+          <div id="mob-nav">
+          <h4 id="mob-brand" className="brand-logo left">Memo</h4>
+            <ul>
+              <li><i className="material-icons mob-nav-icons light-blue-text text-lighten-1" onClick={this.show_add_memo_modal}>add</i></li>
+              <li><i className="material-icons mob-nav-icons light-blue-text text-lighten-1">vpn_key</i></li>
+              <li><i className="material-icons mob-nav-icons light-blue-text text-lighten-1" onClick={this.logout}>exit_to_app</i></li>
+            </ul>
+          </div>  
+        </nav>
+
           <div id="central-container" className="row">
             <div className="container">
 

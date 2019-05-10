@@ -148,7 +148,7 @@ class LandingPage extends Component {
 
                   <div className="card-action center">
                     <span><Link to="/signup" className="orange-text">wanna create an account ?</Link></span>
-                    <button type="submit" id="login_submit" className="waves-effect waves-light light-green darken-2 btn">Sign In                   <i className="material-icons right">send</i>
+                    <button type="submit" id="login_submit" className="waves-effect waves-light light-green darken-2 btn">Sign In                   
                     </button>
                     <br />
 

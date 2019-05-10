@@ -27,9 +27,11 @@ class DoneMemo extends Component {
 
 
     set_memo_done() {
+
+      console.log(this.props.memo_to_done)
         this.props.done_memo(this.props.memo_to_done)
             .then((response) => {
-                this.close_done_memo_modal()
+                this.close_done_memo_modal();
             }).catch((error) => console.log(error));
     }
 

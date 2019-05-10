@@ -33,7 +33,7 @@ class NewMemo extends Component {
 
     if (due_date) {
       if (new Date() > new Date(due_date)) {
-        return M.toast({html: 'Invalid due date. You cannot choose a past date', classes: 'rounded red darken-2'});
+        return M.toast({html: 'Invalid due date. You cannot choose a past date or a current date', classes: 'rounded red darken-2'});
       }
     }
 
@@ -88,7 +88,7 @@ class NewMemo extends Component {
                   
                   <div className="input-field">
                     <i className="material-icons prefix white-text">title</i>
-                    <input id="new_memo_title" name="new_memo_title" onChange={this.fetch_field_data} value={this.state.new_memo_title} type="text" />
+                    <input id="new_memo_title" maxLength="25" name="new_memo_title" onChange={this.fetch_field_data} value={this.state.new_memo_title} type="text" />
                     <label htmlFor="new_memo_title">Title</label>
                   </div>
 
