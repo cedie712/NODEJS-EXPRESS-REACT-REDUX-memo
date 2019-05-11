@@ -131,7 +131,7 @@ class LandingPage extends Component {
                       <i className="material-icons prefix grey-text text-darken-1">account_circle</i>
                       <input id="email_signin" name="email_signin"
                       onChange={this.fetch_field_data} value={this.state.email_signin}
-                      type="text" className="validate" />
+                      type="text" />
                       <label htmlFor="email_signin">Email</label>
                     </div>
 
@@ -139,10 +139,10 @@ class LandingPage extends Component {
                     <i className="material-icons prefix grey-text text-darken-1">lock</i>
                       <input id="password_signin" name="password_signin"
                       onChange={this.fetch_field_data} value={this.state.password_signin}
-                      type="password" className="validate" />
+                      type="password" />
                       <label htmlFor="password_signin">Password</label>
                     </div>
-                    <a href="/" className="red-text">forgot password?</a>
+                    <Link to="/forgot_password" className="red-text">forgot password?</Link>
 
                   </div>
 

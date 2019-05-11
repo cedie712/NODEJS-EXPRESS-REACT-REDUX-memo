@@ -9,6 +9,7 @@ import Posts from './main_components/posts';
 import DeleteMemo from './main_components/delete_memo';
 import DoneMemo from './main_components/done_memo';
 import ChangePassword from './main_components/change_password';
+import ConfirmLogout from './main_components/confirm_logout'
 
 //static
 import '../static/css/main_index.css';
@@ -25,7 +26,7 @@ class Main extends Component {
     this.check_auth();
     this.show_add_memo_modal = this.show_add_memo_modal.bind(this);
     this.show_change_password_modal = this.show_change_password_modal.bind(this);
-    this.logout = this.logout.bind(this);
+    this.show_logout_modal =  this.show_logout_modal.bind(this);
   }
 
   componentDidMount() {
@@ -48,19 +49,6 @@ class Main extends Component {
         })
   }
 
-
-  logout() {
-    axios.get('/api/user/signout')
-    .then((response) => {
-        this.setState({is_authenticated: false});
-        return window.location ='/';
-    })
-    .catch((error) => {
-        console.log(error);
-        // this.setState({is_authenticated: false})
-    })
-  }
-
   show_add_memo_modal(event) {
     event.preventDefault();
     let modal_container = document.getElementById("new-memo-modal");
@@ -70,6 +58,13 @@ class Main extends Component {
 
   show_change_password_modal() {
     let modal_container = document.getElementById("change-password-container");
+
+    modal_container.style.display = 'grid';
+  }
+
+  show_logout_modal(event) {
+    event.preventDefault();
+    let modal_container = document.getElementById("logout-container");
 
     modal_container.style.display = 'grid';
   }
@@ -110,7 +105,7 @@ class Main extends Component {
             <ul>
               <li><i id="mob-add" className="material-icons mob-nav-icons light-blue-text text-lighten-1" onClick={this.show_add_memo_modal}>add</i></li>
               <li><i id="mob-key" className="material-icons mob-nav-icons light-blue-text text-lighten-1" onClick={this.show_change_password_modal}>vpn_key</i></li>
-              <li><i className="material-icons mob-nav-icons light-blue-text text-lighten-1" onClick={this.logout}>exit_to_app</i></li>
+              <li><i className="material-icons mob-nav-icons light-blue-text text-lighten-1" onClick={this.show_logout_modal}>exit_to_app</i></li>
             </ul>
           </div>  
         </nav>
@@ -134,7 +129,7 @@ class Main extends Component {
                 </div>
 
                 <div className="animated bounceInLeft">
-                  <i id="logout" onClick={this.logout} className="medium material-icons light-blue-text text-lighten-1 pointer">exit_to_app</i>
+                  <i id="logout" onClick={this.show_logout_modal} className="medium material-icons light-blue-text text-lighten-1 pointer">exit_to_app</i>
                   <br />
                   <h6 className="white-text">Logout</h6>
                 </div>
@@ -158,6 +153,7 @@ class Main extends Component {
         <DeleteMemo />
         <DoneMemo />
         <ChangePassword />
+        <ConfirmLogout />
       {/* MODALS */}
 
       </div>

@@ -13,6 +13,7 @@ import './static/css/main.css';
 import LandingPage from './components/landing_page';
 import SignUp from './components/sign_up';
 import Main from './components/main';
+import ForgotPassword from './components/forgot_password';
 
 
 const Route = require('react-router-dom').Route;
@@ -42,6 +43,10 @@ class App extends Component {
               {/* main */}
                 <Route path={'/main'} render={(props) => <Main {...props} />} />
               {/* main */}
+
+              {/* forgot_password */}
+                <Route path={'/forgot_password'} component={ForgotPassword} />
+              {/* forgot_password */}
 
             </div>
           </Router>

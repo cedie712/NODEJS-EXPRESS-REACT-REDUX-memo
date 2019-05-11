@@ -5,6 +5,7 @@ const csrfProtection = csrf({cookie: true});
 
 const passport = require('passport');
 const models = require('../models');
+const validate_password = require('../custom_scripts/password_validator');
 
 /* GET home page. */
 // router.use(function (err, req, res, next) {
@@ -133,6 +134,47 @@ router.post('/edit_memo', (request, response, next) => {
   }).then((post) => {
     return response.json({post: post})
   }).catch(error => console.log(error));
+});
+
+//change_password
+router.post('/change_password', (request, response, next) => {
+  console.log(request.body);
+  let old_password = request.body.old_password
+  let new_password = request.body.new_password
+  let confirm = request.body.confirm
+  let validate = validate_password(new_password, confirm, 8);
+  if (validate) {
+    models.users.findOne({
+      where: {
+        id: request.user.id
+      }
+    })
+    .then((user) => {
+      let check_if_match = models.users.validate_password(old_password, user.password);
+
+      if (check_if_match) {
+        let check_craziness = models.users.validate_password(new_password, user.password);
+        if (check_craziness) {
+          return response.status(400).json({error: 'are you an idiot?'});
+        }
+        else {
+          user.update({
+            password: models.users.encrypt_password(new_password)
+          })
+          .then((user) => {
+            return response.status(200).json({msg: 'ok'});
+          })
+        }
+      }
+      else {
+        return response.status(400).json({error: 'incorrect password!'});
+      }
+
+    }).catch(error => console.log(error));
+  }
+  else {
+    return response.status(400).json({error: validate.error});
+  }
 });
 
 module.exports = router;

@@ -53,6 +53,18 @@ class ChangePassword extends Component {
         if (validate !== true) {
             return M.toast({html: validate.error, classes: 'rounded red darken-2'});
         }
+        axios.post('/api/change_password', {
+            old_password,
+            new_password,
+            confirm
+        })
+        .then((response) => {
+            console.log(response.data)
+            this.close_change_password_modal();
+        })
+        .catch((error) => {
+            return M.toast({html: error.response.data.error, classes: 'rounded red darken-2'});
+        });
     }
 
   render() {

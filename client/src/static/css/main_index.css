@@ -87,7 +87,7 @@
     resize: none;
 }
 
-#new-memo-close, #delete-memo-close, #done-memo-close, #change-password-close {
+#new-memo-close, #delete-memo-close, #done-memo-close, #change-password-close, #logout-close {
   position: absolute;
   right: 10px;
   top: 10px;
@@ -135,7 +135,7 @@
   border-radius: 5px;
 }
 
-#delete-memo-container, #done-memo-container, #change-password-container {
+#delete-memo-container, #done-memo-container, #change-password-container, #logout-container {
   display: none;
   /* display: grid; */
   background-color: rgba(0, 0, 0, 0.397);
@@ -144,6 +144,15 @@
   width: 100%;
   justify-items: center;
   align-items: center;
+}
+
+#logout-confirm-box {
+  background-color: rgb(252, 248, 30);
+  width: 400px;
+  height: 145px;
+  border-radius: 10px; 
+  padding: 10px;
+  padding-top: 45px;
 }
 
 #change-password-box {
@@ -267,7 +276,7 @@ nav {
     top: 5px;
   }
 
-  #delete-memo-confirm-box, #done-memo-confirm-box {
+  #delete-memo-confirm-box, #done-memo-confirm-box, #logout-confirm-box {
     width: auto;
     margin: 10px;
   }

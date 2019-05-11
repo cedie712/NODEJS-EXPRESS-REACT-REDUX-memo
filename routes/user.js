@@ -32,6 +32,7 @@ router.use(function (err, req, res, next) {
 
 // signup_verify_code
 let verification_code_signup = {};
+let forgot_pass_tokens = {};
 
 
 router.get('/signup', csrfProtection, (request, response, next) => {
@@ -72,7 +73,7 @@ router.post('/signup', csrfProtection, (request, response, next) => {
           });
       
           let mailOptions = {
-            from: 'cedrick.domingo048@gmail.com - Memo', // sender address
+            from: 'cedrick.domingo048@gmail.com Memo', // sender address
             to: request.body.email, // list of receivers
             subject: "Email Verfication for Signup Process", // Subject line
             text: `verification code: ${verfication_code}`, // plain text body
@@ -222,6 +223,59 @@ router.get('/google/auth/redirect', passport.authenticate('google'), (request, r
 router.get('/signout', (request, response, next) => {
   request.logOut();
   response.send('logged out');
-})
+});
+
+
+//forgot-password
+router.post('/forgot_password', csrfProtection, (request, response, next) => {
+  let email = request.body.email;
+  models.users.findOne({
+    where: {
+      email,
+    }
+  })
+  .then((user) => {
+    if (!user) {
+      return response.status(400).json({error: 'this user doesn\'t exists'});
+    }
+    if (user.google_id) {
+      return response.status(400).json({error: 'we do not store your password in our database'});
+    }
+    let reset_token = Math.floor((Math.random() * 999999) + 100000);
+
+    try {
+      async function send_email() {
+        let transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 587,
+          secure: false,
+          auth: {
+            user: email_config.EMAIL_USERNAME,
+            pass: email_config.EMAIL_PASSWORD
+          }
+        });
+    
+        let mailOptions = {
+          from: 'cedrick.domingo048@gmail.com Memo', // sender address
+          to: request.body.email, // list of receivers
+          subject: "Password Reset Request", // Subject line
+          text: 'You have receive this mail because you (or somebody else) requested for a password reset in our site.', // plain text body
+        };
+    
+        let info = await transporter.sendMail(mailOptions)
+    
+        console.log("Message sent: %s", info.messageId);
+      }
+      send_email()
+      .then(() => {
+        return response.sendStatus(200);
+      })
+    }
+    catch {
+      (error) => console.log(error);
+    }
+  })
+  .catch(error => console.log(error));
+});
 
 module.exports = router;
