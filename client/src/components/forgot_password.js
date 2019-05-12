@@ -11,18 +11,24 @@ class ForgotPassword extends Component {
     }
 
     send_request() {
-        document.getElementById('forgot-pass-link').style.display = 'none';
+        let email = document.getElementById('email_forgot').value;
         let loading_container_forgot = document.getElementById('loading-container-forgot');
+        if (email === '') {
+            return M.toast({ html: 'provide your email', classes: 'rounded red darken-2' });
+        }
+        document.getElementById('forgot-pass-link').style.display = 'none';
         loading_container_forgot.style.display = 'block';
         axios.post('/api/user/forgot_password', {
-            email: document.getElementById('email_forgot').value,
+            email,
             _csrf: localStorage.csrfToken
         }).then((response) => {
             console.log(response);
             document.getElementById('request-done-forgot').style.display = 'grid';
             return loading_container_forgot.style.display = 'none';
         }).catch(error => {
-            return M.toast({ html: error.response.data.error, classes: 'rounded red darken-2' })
+            M.toast({ html: error.response.data.error, classes: 'rounded red darken-2' });
+            document.getElementById('forgot-pass-link').style.display = 'block';
+            return loading_container_forgot.style.display = 'none';
         });
     }
     render() {

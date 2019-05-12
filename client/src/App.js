@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 
 import { Provider } from 'react-redux'
 import store from './store';
@@ -15,6 +15,7 @@ import SignUp from './components/sign_up';
 import Main from './components/main';
 import ForgotPassword from './components/forgot_password';
 import ForgotPasswordFin from './components/forgot_password_fin';
+import FourZeroFour from './components/404';
 
 
 const Route = require('react-router-dom').Route;
@@ -52,6 +53,10 @@ class App extends Component {
             {/* forgot_password */}
             <Route path={'/forgot_password_final_step/:reset_token'} component={ForgotPasswordFin} />
             {/* forgot_password */}
+
+            {/* 404 */}
+            <Route path='*' exact={true} component={FourZeroFour} />
+            {/* 404 */}
 
           </div>
         </Router>

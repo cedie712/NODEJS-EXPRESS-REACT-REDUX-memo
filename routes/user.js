@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const csrf = require('csurf');
-const csrfProtection = csrf({cookie: true});
+const csrfProtection = csrf({ cookie: true });
 
 const validate_password = require('../custom_scripts/password_validator');
 
@@ -36,7 +36,7 @@ let forgot_pass_tokens = {};
 
 
 router.get('/signup', csrfProtection, (request, response, next) => {
-  context = {csrfToken: request.csrfToken()};
+  context = { csrfToken: request.csrfToken() };
   return response.json(context);
 });
 
@@ -53,10 +53,10 @@ router.post('/signup', csrfProtection, (request, response, next) => {
     }
   }).then((user) => {
     if (user) {
-      return response.status(400).json({error: 'User already exists'});
+      return response.status(400).json({ error: 'User already exists' });
     }
 
-    if(!user) {
+    if (!user) {
 
       let verfication_code = Math.floor((Math.random() * 999999) + 100000);
 
@@ -71,51 +71,51 @@ router.post('/signup', csrfProtection, (request, response, next) => {
               pass: email_config.EMAIL_PASSWORD
             }
           });
-      
+
           let mailOptions = {
             from: 'cedrick.domingo048@gmail.com Memo', // sender address
             to: request.body.email, // list of receivers
             subject: "Email Verfication for Signup Process", // Subject line
             text: `verification code: ${verfication_code}`, // plain text body
           };
-      
+
           let info = await transporter.sendMail(mailOptions)
-      
+
           console.log("Message sent: %s", info.messageId);
-        } 
+        }
 
 
         // PRODUCTION - SEND VERIFICATION
         send_email()
-        .then(() => {
-          verification_code_signup[request.body._csrf] = {
-            verfication_code : verfication_code,
-            email: request.body.email,
-            password: request.body.password
-          };
+          .then(() => {
+            verification_code_signup[request.body._csrf] = {
+              verfication_code: verfication_code,
+              email: request.body.email,
+              password: request.body.password
+            };
 
-          console.log(verification_code_signup[request.body._csrf]);
+            console.log(verification_code_signup[request.body._csrf]);
 
-          // drop the verication code after 5 mins
-          async function verification_limiter(ms) {
-            return new Promise(resolve => {
-              setTimeout(
-                () => {
-                  delete verification_code_signup[request.body._csrf]
-                  console.log(verification_code_signup);
-                }, 300000);
-            });
-          }
+            // drop the verication code after 5 mins
+            async function verification_limiter(ms) {
+              return new Promise(resolve => {
+                setTimeout(
+                  () => {
+                    delete verification_code_signup[request.body._csrf]
+                    console.log(verification_code_signup);
+                  }, 300000);
+              });
+            }
 
-          verification_limiter()
+            verification_limiter();
 
-          return response.sendStatus(200);
-        })
-        .catch((error) => {
-          return response.status(400).json({error: 'Email does not exists'});
-        })
+            return response.sendStatus(200);
+          })
+          .catch((error) => {
+            return response.status(400).json({ error: 'Email does not exists' });
+          })
         // PRODUCTION - SEND VERIFICATION
-      
+
       } catch (error) {
         console.log(error);
       }
@@ -126,14 +126,14 @@ router.post('/signup', csrfProtection, (request, response, next) => {
 });
 
 
-router.post('/verify_signup', csrfProtection,(request, response, next) => {
+router.post('/verify_signup', csrfProtection, (request, response, next) => {
 
   if (request.body.verfication_code === '' || !verification_code_signup[request.body._csrf]) {
     return response.status(400);
   }
 
   if (verification_code_signup[request.body._csrf].verfication_code !== parseInt(request.body.verification_code)) {
-    return response.status(400).json({error: 'Invalid Code'});
+    return response.status(400).json({ error: 'Invalid Code' });
   }
 
   request.body['email'] = verification_code_signup[request.body._csrf].email;
@@ -141,45 +141,45 @@ router.post('/verify_signup', csrfProtection,(request, response, next) => {
   // return next();
 
   passport.authenticate('local-signup',
-  (error, user, info) => {
+    (error, user, info) => {
 
-    //do whatever you like here
-    if (error) {
-      console.log(error)
-    }
+      //do whatever you like here
+      if (error) {
+        console.log(error)
+      }
 
-    if (info === 'user already exists') {
-      return response.status(400).json({error: info});
-    }
+      if (info === 'user already exists') {
+        return response.status(400).json({ error: info });
+      }
 
-    if (user) {
-      console.log('user created');
- 
-      passport.authenticate('local-signin', {
-        successRedirect: '/main',
-        failureRedirect: '/',
-      }, (error, user, info) => {
-        if (info) {
-          request.logIn(user, (error) => {
-            if (error) {
-              console.log(error);
-            }
-          });
-          return response.status(200).json({
-            csrfToken: request.csrfToken()
-          });
-        }
-      })(request, response, next);
+      if (user) {
+        console.log('user created');
 
-    }
+        passport.authenticate('local-signin', {
+          successRedirect: '/main',
+          failureRedirect: '/',
+        }, (error, user, info) => {
+          if (info) {
+            request.logIn(user, (error) => {
+              if (error) {
+                console.log(error);
+              }
+            });
+            return response.status(200).json({
+              csrfToken: request.csrfToken()
+            });
+          }
+        })(request, response, next);
 
-  })(request, response, next);
+      }
+
+    })(request, response, next);
 
 });
 
 //user-signin-local
-router.get('/signin', csrfProtection, function(request, response, next) {
-  context = {csrfToken: request.csrfToken()};
+router.get('/signin', csrfProtection, function (request, response, next) {
+  context = { csrfToken: request.csrfToken() };
   if (request.isAuthenticated()) {
     context['is_authenticated'] = true;
   }
@@ -188,7 +188,7 @@ router.get('/signin', csrfProtection, function(request, response, next) {
 
 router.post('/signin', csrfProtection, (request, response, next) => {
   if (request.body.email === '' || request.body.password === '') {
-    return response.status(400).json({error: 'complete the fields'});
+    return response.status(400).json({ error: 'complete the fields' });
   }
   passport.authenticate('local-signin', {
     successRedirect: '/main',
@@ -206,7 +206,7 @@ router.post('/signin', csrfProtection, (request, response, next) => {
       });
     }
 
-    return response.status(403).json({error: 'Incorrect username or password'})
+    return response.status(403).json({ error: 'Incorrect username or password' })
 
   })(request, response, next);
 });
@@ -234,72 +234,115 @@ router.post('/forgot_password', csrfProtection, (request, response, next) => {
       email,
     }
   })
-  .then((user) => {
-    if (!user) {
-      return response.status(400).json({error: 'this user doesn\'t exists'});
-    }
-    if (user.google_id) {
-      return response.status(400).json({error: 'we do not store your password in our database'});
-    }
-    let reset_token = Math.floor((Math.random() * 999999) + 100000);
-
-    try {
-      async function send_email() {
-        let transporter = nodemailer.createTransport({
-          host: "smtp.gmail.com",
-          port: 587,
-          secure: false,
-          auth: {
-            user: email_config.EMAIL_USERNAME,
-            pass: email_config.EMAIL_PASSWORD
-          }
-        });
-    
-        let mailOptions = {
-          from: 'cedrick.domingo048@gmail.com Memo', // sender address
-          to: request.body.email, // list of receivers
-          subject: "Password Reset Request", // Subject line
-          text: `You have receive this mail because you (or somebody else) requested for a password reset of your account in our site. \n Clink this link to proceed: http://localhost:8000/forgot_password_final_step/${reset_token}`, // plain text body
-        };
-        
-        let info = await transporter.sendMail(mailOptions)
-    
-        console.log("Message sent: %s", info.messageId);
+    .then((user) => {
+      if (!user) {
+        return response.status(400).json({ error: 'this user doesn\'t exists' });
       }
-      send_email()
-      .then(() => {
-        forgot_pass_tokens[reset_token] = request.body.email;
-        console.log(forgot_pass_tokens);
+      if (user.google_id) {
+        return response.status(400).json({ error: 'we do not store your password in our database' });
+      }
+      let reset_token = Math.floor((Math.random() * 999999) + 100000);
 
-        async function verification_limiter(ms) {
-          return new Promise(resolve => {
-            setTimeout(
-              () => {
-                delete forgot_pass_tokens[reset_token];
-              }, 3600000);
+      try {
+        async function send_email() {
+          let transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false,
+            auth: {
+              user: email_config.EMAIL_USERNAME,
+              pass: email_config.EMAIL_PASSWORD
+            }
           });
+
+          let mailOptions = {
+            from: 'cedrick.domingo048@gmail.com Memo', // sender address
+            to: request.body.email, // list of receivers
+            subject: "Password Reset Request", // Subject line
+            text: `You have receive this mail because you (or somebody else) requested for a password reset of your account in our site. \n Clink this link to proceed: http://localhost:8000/forgot_password_final_step/${reset_token}`, // plain text body
+          };
+
+          let info = await transporter.sendMail(mailOptions)
+
+          console.log("Message sent: %s", info.messageId);
         }
+        send_email()
+          .then(() => {
+            forgot_pass_tokens[reset_token] = request.body.email;
+            console.log(forgot_pass_tokens);
 
-        verification_limiter()
+            async function verification_limiter(ms) {
+              return new Promise(resolve => {
+                setTimeout(
+                  () => {
+                    delete forgot_pass_tokens[reset_token];
+                  }, 3600000);
+              });
+            }
 
-        return response.sendStatus(200);
-      })
-    }
-    catch {
-      (error) => console.log(error);
-    }
-  })
-  .catch(error => console.log(error));
+            verification_limiter()
+
+            return response.sendStatus(200);
+          }).catch(error => console.log(error));
+      }
+      catch {
+        (error) => console.log(error);
+      }
+    })
+    .catch(error => console.log(error));
 });
 
 
 router.post('/forgot_password_final_step', (request, response, next) => {
   let reset_token = request.body.reset_token;
   if (forgot_pass_tokens[reset_token]) {
-    return response.status(200).json({msg: 'ok'});
+    return response.status(200).json({ msg: 'ok' });
   }
   else {
-    return response.status(400).json({error: 'forbidden'});
+    return response.status(400).json({ error: 'forbidden' });
+  }
+});
+
+router.post('/reset_password', (request, response, next) => {
+  let reset_token = request.body.reset_token;
+  if (forgot_pass_tokens[reset_token]) {
+    let email = forgot_pass_tokens[reset_token];
+    let new_password = request.body.new_password;
+    let confirm = request.body.confirm;
+    let validate = validate_password(new_password, confirm, 8);
+    if (validate) {
+      models.users.findOne({
+        where: {
+          email: email
+        }
+      })
+      .then((user) => {
+        let check_idiocy = models.users.validate_password(new_password, user.password);
+        if (!check_idiocy) {
+          models.users.update({
+            password: models.users.encrypt_password(new_password)
+          },
+            {
+              where: {
+                email: email
+              }
+            })
+            .then((user) => {
+              delete forgot_pass_tokens[reset_token];
+              return response.status(200).json({ msg: 'ok' });
+            }).catch(error => console.log(error));
+        }
+        else {
+          return response.status(400).json({ error: 'are you an idiot?' });
+        }
+      }).catch(error => console.log(error));
+    }
+    else {
+      return response.status(400).json({ error: validate.error });
+    }
+  }
+  else {
+    return response.status(400).json({ error: 'forbidden' });
   }
 });
 
