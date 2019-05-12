@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 
 import { Provider } from 'react-redux'
 import store from './store';
@@ -34,30 +34,33 @@ class App extends Component {
         <Router>
           <div className="App">
 
-            {/* home */}
-            <Route path='/' exact render={(props) => <LandingPage {...props} />} />
-            {/* home */}
+            <Switch>
+              {/* home */}
+              <Route path='/' exact render={(props) => <LandingPage {...props} />} />
+              {/* home */}
 
-            {/* signup */}
-            <Route path='/signup' exact render={(props) => <SignUp {...props} />} />
-            {/* signup */}
+              {/* signup */}
+              <Route path='/signup' exact render={(props) => <SignUp {...props} />} />
+              {/* signup */}
 
-            {/* main */}
-            <Route path={'/main'} render={(props) => <Main {...props} />} />
-            {/* main */}
+              {/* main */}
+              <Route path={'/main'} exact render={(props) => <Main {...props} />} />
+              {/* main */}
 
-            {/* forgot_password */}
-            <Route path={'/forgot_password'} component={ForgotPassword} />
-            {/* forgot_password */}
 
-            {/* forgot_password */}
-            <Route path={'/forgot_password_final_step/:reset_token'} component={ForgotPasswordFin} />
-            {/* forgot_password */}
+              {/* forgot_password */}
+              <Route path={'/forgot_password'} exact component={ForgotPassword} />
+              {/* forgot_password */}
 
-            {/* 404 */}
-            <Route path='*' exact={true} component={FourZeroFour} />
-            {/* 404 */}
+              {/* forgot_password */}
+              <Route path={'/forgot_password_final_step/:reset_token'} exact component={ForgotPasswordFin} />
+              {/* forgot_password */}
 
+              {/* 404 */}
+              <Route component={FourZeroFour} />
+              {/* 404 */}
+
+            </Switch>
           </div>
         </Router>
       </Provider>

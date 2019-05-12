@@ -104,9 +104,9 @@ class LandingPage extends Component {
 
     return (
       <div className="LandingPage">
-        <div className="row">
+        <div className="landing-page-wrapper">
 
-          <div id="landing_page_container_top" className="col s12 grey darken-4 center">
+          <div id="landing_page_container_top" className="grey darken-4 center">
             <div id="top-branding" className="container">
               <h1 id="brand-title" className="light-blue-text text-lighten-1 animated bounceInDown">Memo</h1>
               <h6 className="white-text animated bounceInRight">A cool place to dump your to-dos, notices,<br />  and what-so-ever list with shit-free guarantee</h6>
@@ -116,7 +116,7 @@ class LandingPage extends Component {
             </div>
           </div>
 
-          <div id="block-2-landing-page" className="col s12 light-blue lighten-1">
+          <div id="block-2-landing-page" className="light-blue lighten-1">
             <div className="center">
 
               <form className="" onSubmit={this.process_signin}>
@@ -170,6 +170,7 @@ class LandingPage extends Component {
             <div id="landing-page-footer" className="center">
               <p className="white-text">copyrights reserved {year_now}</p>
               <p className="grey-text text-darken-3">cedrickdomingo048@gmail.com</p>
+              <span><a href="https://web.facebook.com/cedrick.domingo.75"><i className="fab fa-facebook fa-2x links light-blue-text text-darken-4"></i></a><a href="https://github.com/cedie712"><i className="fab fa-github fa-2x grey-text text-darken-4 links"></i></a></span>
             </div>
           </div>
           

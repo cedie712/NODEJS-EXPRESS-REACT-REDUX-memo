@@ -48,3 +48,7 @@ input[type=date]::-webkit-outer-spin-button {
 textarea, div {
   white-space: pre-wrap;
 }
+
+.links {
+  margin: 5px;
+}
