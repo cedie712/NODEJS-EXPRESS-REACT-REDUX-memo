@@ -259,15 +259,29 @@ router.post('/forgot_password', csrfProtection, (request, response, next) => {
           from: 'cedrick.domingo048@gmail.com Memo', // sender address
           to: request.body.email, // list of receivers
           subject: "Password Reset Request", // Subject line
-          text: 'You have receive this mail because you (or somebody else) requested for a password reset in our site.', // plain text body
+          text: `You have receive this mail because you (or somebody else) requested for a password reset of your account in our site. \n Clink this link to proceed: http://localhost:8000/forgot_password_final_step/${reset_token}`, // plain text body
         };
-    
+        
         let info = await transporter.sendMail(mailOptions)
     
         console.log("Message sent: %s", info.messageId);
       }
       send_email()
       .then(() => {
+        forgot_pass_tokens[reset_token] = request.body.email;
+        console.log(forgot_pass_tokens);
+
+        async function verification_limiter(ms) {
+          return new Promise(resolve => {
+            setTimeout(
+              () => {
+                delete forgot_pass_tokens[reset_token];
+              }, 3600000);
+          });
+        }
+
+        verification_limiter()
+
         return response.sendStatus(200);
       })
     }
@@ -276,6 +290,17 @@ router.post('/forgot_password', csrfProtection, (request, response, next) => {
     }
   })
   .catch(error => console.log(error));
+});
+
+
+router.post('/forgot_password_final_step', (request, response, next) => {
+  let reset_token = request.body.reset_token;
+  if (forgot_pass_tokens[reset_token]) {
+    return response.status(200).json({msg: 'ok'});
+  }
+  else {
+    return response.status(400).json({error: 'forbidden'});
+  }
 });
 
 module.exports = router;
