@@ -67,6 +67,19 @@ app.use('/api', indexRouter);
 //   res.render('error');
 // });
 
+//production mode
+if(process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, 'client/build')));
+    //
+    app.get('*', (req, res) => {
+      res.sendfile(path.join(__dirname = 'client/build/index.html'));
+    })
+  }
+  //build mode
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname+'/client/public/index.html'));
+  })
+
 // concurrently script
 // "start": "concurrently \"nodemon ./bin/www\" \"cd client && npm start\""
 module.exports = app;
